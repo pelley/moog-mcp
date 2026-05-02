@@ -1,6 +1,6 @@
-# Moog Model D MCP Server
+# Moog MCP Server
 
-A Model Context Protocol (MCP) server that exposes the **full Moog Model D control surface** as semantically named tools, so an LLM agent (Claude, etc.) can play notes, twiddle knobs, flip switches, and improvise ambient synth textures on your Mac copy of the **Minimoog Model D** app — and, with a little extra mapping, the **Model 15** app too.
+A Model Context Protocol (MCP) server that exposes the **full control surfaces of the Moog Model D and Moog Model 15** apps as semantically named tools, so an LLM agent (Claude, etc.) can play notes, twiddle knobs, flip switches, and improvise synthesizer textures on your Mac.
 
 Built in TypeScript on top of:
 
@@ -9,17 +9,18 @@ Built in TypeScript on top of:
 
 ## What you get
 
-- **One tool per panel control.** `set_filter_cutoff`, `set_oscillator_1_waveform`, `set_filter_emphasis`, `set_loudness_attack`, `set_glide_on`, `set_mod_wheel`, `set_pitch_wheel` — every knob, switch, and wheel on the Model D's panel is its own tool with a meaningful name and a typed value (number, boolean, or enum of named positions).
-- **Performance tools.** `play_note`, `play_chord`, `play_sequence`, `pitch_bend`, `panic`, `get_active_notes`.
-- **Sequence scheduling** for ambient textures: drop a list of timed events (notes + CC changes + bends) and the server schedules them with millisecond precision.
-- **Safe panic.** The agent (or you) can stop everything cleanly: All Notes Off plus an explicit Note Off for every held note.
-- **Virtual port out of the box.** A CoreMIDI source named `Moog MCP Out` appears in the Model D app's MIDI Input list. No IAC fiddling required (though you can route through IAC if you prefer — see below).
+- **One tool per panel control.** Every knob, switch, and wheel on each synth's panel is its own tool with a meaningful name and a typed value (number, boolean, or enum of named positions). `set_filter_cutoff`, `set_osc1_waveform`, `set_lpf_emphasis`, `set_env1_attack`, `set_seq_stages` — the agent never has to guess a CC number.
+- **Both synths supported.** The same server binary handles the Model D (40 controls) and the Model 15 (43 controls). Select which instrument at startup via an env var; run two instances simultaneously for duets.
+- **Performance tools.** `play_note`, `play_chord`, `play_sequence`, `panic`, `get_active_notes`.
+- **Sequence scheduling** for ambient textures: drop a list of timed events (notes + CC changes + pitch bends) and the server fires them with millisecond precision.
+- **Safe panic.** The agent (or you) can stop everything cleanly: All Notes Off plus explicit Note Off for every held note, plus cancellation of all in-flight sequences.
+- **Virtual port out of the box.** A CoreMIDI source appears in the app's MIDI Input list automatically. No IAC fiddling required.
 
 ## Quick start
 
 ```bash
 git clone <this-repo>
-cd moog-model-d-mcp
+cd moog-mcp
 npm install
 npm run build
 ```
@@ -30,94 +31,176 @@ npm run build
 npm run list-ports
 ```
 
-You should see your existing CoreMIDI devices. After you start the server (next step), `Moog MCP Out` will join the list.
+You should see your existing CoreMIDI devices. Once the server starts, its virtual port will join the list.
 
-### 2. Set up the Model D app
+---
+
+## Model D setup
+
+### 2a. Connect the Model D app
 
 1. Open the **Minimoog Model D** app on your Mac.
 2. Go to **Settings → MIDI**.
 3. Make sure **MIDI In** is enabled.
-4. The app should auto-discover the `Moog MCP Out` port once the server is running. Select it as a MIDI input source.
+4. Select `Moog MCP Out` (or whatever you set `MOOG_MCP_PORT_NAME` to) as the MIDI input source.
 5. **Receive Channel:** set to `1` (or whatever you set `MOOG_MCP_CHANNEL` to).
 
-### 3. Build the CC Map preset (one-time setup)
+### 3a. Build the Model D CC Map preset (one-time setup)
 
-The Model D app uses **user-defined CC mapping** rather than a fixed factory chart. You map each control once, save it as a CC Map preset, and from then on the server's named tools will hit the right knobs.
+The Model D app uses **user-defined CC mapping** rather than a fixed factory chart. Map each control once in the app, save it as a CC Map preset, and from then on the server's named tools will hit the right knobs.
 
 In the app: **Settings → MIDI → Map CCs**.
 
 For each control listed in [`src/model-d.ts`](src/model-d.ts):
 
-1. Tap the control on the panel (it'll highlight, awaiting MIDI Learn).
+1. Tap the control on the panel (it highlights, awaiting MIDI Learn).
 2. Either:
-   - **Easy way:** in another terminal, run a probe — `node -e "const m = require('easymidi'); const o = new m.Output('Moog MCP Out', true); setTimeout(() => { o.send('cc', { controller: 74, value: 64, channel: 0 }); }, 500);"` (replace `74` with the desired CC). The first CC the app sees will be assigned.
+   - **Easy way:** send a probe CC from another terminal (replace `74` with the desired CC number): `node -e "import('easymidi').then(m => { const o = new m.Output('Moog MCP Out', true); setTimeout(() => { o.send('cc', { controller: 74, value: 64, channel: 0 }); }, 500); })"`
    - **Manual way:** double-tap the control in the Map CCs view and type the CC number directly.
-3. After you've assigned every control, **save** the map: **Save/Load CC Map → Save → "Claude MCP"** (or any name you like).
+3. After assigning every control, **save** the map: **Save/Load CC Map → Save → "Claude MCP"** (or any name you like).
 
-The default CC numbers chosen by the server are listed below. They avoid reserved CCs (0, 6, 32, 38, 64, 96–101, 120–127) and give the panel a coherent left-to-right walk.
+#### Model D default CC map
 
-#### Default CC map
-
-| Control                     | CC  | Notes                               |
-| --------------------------- | --- | ----------------------------------- |
-| Tune                        | 20  |                                     |
-| Glide rate                  | 5   | MIDI standard Portamento Time       |
-| Modulation Mix              | 21  |                                     |
-| Osc 1 Range                 | 22  | switchN: LO/32'/16'/8'/4'/2'        |
-| Osc 1 Waveform              | 23  | switchN, 7 wave shapes              |
-| Osc 2 Range                 | 24  |                                     |
-| Osc 2 Frequency             | 25  |                                     |
-| Osc 2 Waveform              | 26  |                                     |
-| Osc 3 Range                 | 27  |                                     |
-| Osc 3 Frequency             | 28  |                                     |
-| Osc 3 Waveform              | 29  |                                     |
-| Oscillator Modulation       | 30  | switch                              |
-| Osc 3 Keyboard Control      | 31  | switch                              |
-| Osc 1 Volume                | 33  |                                     |
-| Osc 1 On/Off                | 34  | switch                              |
-| External Input Volume       | 35  |                                     |
-| External Input On/Off       | 36  | switch                              |
-| Osc 2 Volume                | 37  |                                     |
+| Control                     | CC  | Notes                                |
+| --------------------------- | --- | ------------------------------------ |
+| Tune                        | 20  |                                      |
+| Glide Rate                  | 5   | MIDI standard Portamento Time        |
+| Modulation Mix              | 21  |                                      |
+| Osc 1 Range                 | 22  | switchN: LO/32'/16'/8'/4'/2'         |
+| Osc 1 Waveform              | 23  | switchN, 7 wave shapes               |
+| Osc 2 Range                 | 24  |                                      |
+| Osc 2 Frequency             | 25  |                                      |
+| Osc 2 Waveform              | 26  |                                      |
+| Osc 3 Range                 | 27  |                                      |
+| Osc 3 Frequency             | 28  |                                      |
+| Osc 3 Waveform              | 29  |                                      |
+| Oscillator Modulation       | 30  | switch                               |
+| Osc 3 Keyboard Control      | 31  | switch                               |
+| Osc 1 Volume                | 33  |                                      |
+| Osc 1 On/Off                | 34  | switch                               |
+| External Input Volume       | 35  |                                      |
+| External Input On/Off       | 36  | switch                               |
+| Osc 2 Volume                | 37  |                                      |
 | Osc 2 On/Off                | 39  | switch (38 reserved: Data Entry LSB) |
-| Noise Volume                | 40  |                                     |
-| Noise On/Off                | 41  | switch                              |
-| Noise Color                 | 42  | switch (white/pink)                 |
-| Osc 3 Volume                | 43  |                                     |
-| Osc 3 On/Off                | 44  | switch                              |
-| Filter Cutoff               | 74  | MIDI standard Brightness            |
-| Filter Emphasis (Resonance) | 71  | MIDI standard Resonance             |
-| Filter Contour Amount       | 45  |                                     |
-| Filter Attack               | 46  |                                     |
-| Filter Decay                | 47  |                                     |
-| Filter Sustain              | 48  |                                     |
-| Filter Modulation           | 49  | switch                              |
-| Keyboard Control 1          | 50  | switch                              |
-| Keyboard Control 2          | 51  | switch                              |
-| Loudness Attack             | 52  |                                     |
-| Loudness Decay              | 53  |                                     |
-| Loudness Sustain            | 54  |                                     |
-| Decay Switch                | 55  | switch                              |
-| Main Output Volume          | 7   | MIDI standard Channel Volume        |
-| Main Output On/Off          | 56  | switch                              |
-| A-440 Tuning Tone           | 57  | switch                              |
-| Glide On/Off                | 65  | MIDI standard Portamento On/Off     |
-| Mod Wheel                   | 1   | Fixed by MIDI spec                  |
-| Pitch Wheel                 | —   | 14-bit MIDI Pitch Bend (not a CC)   |
+| Noise Volume                | 40  |                                      |
+| Noise On/Off                | 41  | switch                               |
+| Noise Color                 | 42  | switch (white/pink)                  |
+| Osc 3 Volume                | 43  |                                      |
+| Osc 3 On/Off                | 44  | switch                               |
+| Filter Cutoff               | 74  | MIDI standard Brightness             |
+| Filter Emphasis (Resonance) | 71  | MIDI standard Resonance              |
+| Filter Contour Amount       | 45  |                                      |
+| Filter Attack               | 46  |                                      |
+| Filter Decay                | 47  |                                      |
+| Filter Sustain              | 48  |                                      |
+| Filter Modulation           | 49  | switch                               |
+| Keyboard Control 1          | 50  | switch                               |
+| Keyboard Control 2          | 51  | switch                               |
+| Loudness Attack             | 52  |                                      |
+| Loudness Decay              | 53  |                                      |
+| Loudness Sustain            | 54  |                                      |
+| Decay Switch                | 55  | switch                               |
+| Main Output Volume          | 7   | MIDI standard Channel Volume         |
+| Main Output On/Off          | 56  | switch                               |
+| A-440 Tuning Tone           | 57  | switch                               |
+| Glide On/Off                | 65  | MIDI standard Portamento On/Off      |
+| Mod Wheel                   | 1   | Fixed by MIDI spec                   |
+| Pitch Wheel                 | —   | 14-bit MIDI Pitch Bend (not a CC)    |
 
-You can override defaults by setting environment variables or editing `src/model-d.ts` before building.
+---
 
-### 4. Configure your MCP client
+## Model 15 setup
 
-Add the server to your MCP client's config. For Claude Desktop, edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
+### 2b. Connect the Model 15 app
+
+The Model 15 server **must use a different port name** from the Model D server so CoreMIDI doesn't collide the names. Set `MOOG_MCP_PORT_NAME=Moog Model 15 Out` (see Configuration below) and then:
+
+1. Open the **Moog Model 15** app on your Mac.
+2. Go to **Settings → MIDI**.
+3. Make sure **MIDI In** is enabled.
+4. Select `Moog Model 15 Out` as the MIDI input source.
+5. **Receive Channel:** set to `1`.
+
+### 3b. Build the Model 15 CC Map preset (one-time setup)
+
+The Model 15 app also uses MIDI Learn. The process is the same as the Model D: go to **Settings → MIDI → MIDI Learn**, tap each module knob or switch, send the corresponding CC, and save the preset as e.g. "Claude MCP 15".
+
+The controls and their default CC numbers are defined in [`src/model-15.ts`](src/model-15.ts). The table below summarises them.
+
+#### Model 15 default CC map
+
+| Control                    | CC  | Section     | Notes                              |
+| -------------------------- | --- | ----------- | ---------------------------------- |
+| 921A Frequency             | 20  | oscillators | Master driver pitch                |
+| 921A Range                 | 21  | oscillators | switchN: LO/32'/16'/8'/4'/2'       |
+| Osc 1 Range                | 22  | oscillators |                                    |
+| Osc 1 Frequency            | 23  | oscillators | Fine tune                          |
+| Osc 1 Waveform             | 24  | oscillators | switchN: triangle/sawtooth/square  |
+| Osc 1 Pulse Width          | 25  | oscillators |                                    |
+| Osc 2 Range                | 26  | oscillators |                                    |
+| Osc 2 Frequency            | 27  | oscillators |                                    |
+| Osc 2 Waveform             | 28  | oscillators |                                    |
+| Osc 2 Pulse Width          | 29  | oscillators |                                    |
+| Osc 3 Range                | 30  | oscillators |                                    |
+| Osc 3 Frequency            | 31  | oscillators |                                    |
+| Osc 3 Waveform             | 33  | oscillators | (32 reserved: Bank Select LSB)     |
+| Osc 3 Pulse Width          | 34  | oscillators |                                    |
+| Osc 1 Volume               | 35  | mixer       |                                    |
+| Osc 2 Volume               | 36  | mixer       |                                    |
+| Osc 3 Volume               | 37  | mixer       |                                    |
+| Noise Volume               | 39  | mixer       | (38 reserved: Data Entry LSB)      |
+| Noise Color                | 40  | mixer       | switch (white/pink)                |
+| External Input Volume      | 41  | mixer       |                                    |
+| 904A LPF Keyboard Tracking | 42  | filters     | switchN: off/1/3/2/3/full          |
+| 904A LPF Env Amount        | 45  | filters     |                                    |
+| 904A LPF Cutoff            | 74  | filters     | MIDI standard Brightness           |
+| 904A LPF Emphasis          | 71  | filters     | MIDI standard Resonance            |
+| 904B HPF Cutoff            | 60  | filters     |                                    |
+| 904C Coupler Balance       | 61  | filters     |                                    |
+| Envelope 1 Attack          | 46  | envelopes   | Typically patched to filter        |
+| Envelope 1 Decay           | 47  | envelopes   |                                    |
+| Envelope 1 Sustain         | 48  | envelopes   |                                    |
+| Envelope 1 Release         | 49  | envelopes   |                                    |
+| Envelope 2 Attack          | 52  | envelopes   | Typically patched to VCA           |
+| Envelope 2 Decay           | 53  | envelopes   |                                    |
+| Envelope 2 Sustain         | 54  | envelopes   |                                    |
+| Envelope 2 Release         | 55  | envelopes   |                                    |
+| VCA 1 Initial Gain         | 56  | amplifiers  |                                    |
+| VCA 2 Initial Gain         | 57  | amplifiers  |                                    |
+| 960 Step Rate              | 62  | sequencer   |                                    |
+| 960 Stage Count            | 63  | sequencer   | switchN: 1–8 steps                 |
+| Glide Rate                 | 5   | performance | MIDI standard Portamento Time      |
+| Glide On/Off               | 65  | performance | MIDI standard Portamento On/Off    |
+| Main Volume                | 7   | performance | MIDI standard Channel Volume       |
+| Mod Wheel                  | 1   | performance | Fixed by MIDI spec                 |
+| Pitch Wheel                | —   | performance | 14-bit MIDI Pitch Bend (not a CC)  |
+
+---
+
+## Configure your MCP client
+
+Add one server entry per synth. **Each must have a unique `MOOG_MCP_PORT_NAME`** — if both use the default `Moog MCP Out`, CoreMIDI will rename the second one to `Moog MCP Out1` and the app won't see it.
+
+For Claude Desktop, edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "moog-model-d": {
       "command": "node",
-      "args": ["/absolute/path/to/moog-model-d-mcp/dist/index.js"],
+      "args": ["/absolute/path/to/moog-mcp/dist/index.js"],
       "env": {
+        "MOOG_MCP_SYNTH": "model-d",
         "MOOG_MCP_PORT_NAME": "Moog MCP Out",
+        "MOOG_MCP_CHANNEL": "1"
+      }
+    },
+    "moog-model-15": {
+      "command": "node",
+      "args": ["/absolute/path/to/moog-mcp/dist/index.js"],
+      "env": {
+        "MOOG_MCP_SYNTH": "model-15",
+        "MOOG_MCP_PORT_NAME": "Moog Model 15 Out",
         "MOOG_MCP_CHANNEL": "1"
       }
     }
@@ -125,48 +208,42 @@ Add the server to your MCP client's config. For Claude Desktop, edit `~/Library/
 }
 ```
 
-For Claude Code, run from the repo:
+For Claude Code, add each server separately:
 
 ```bash
-claude mcp add moog-model-d -- node $(pwd)/dist/index.js
+claude mcp add moog-model-d  -- env MOOG_MCP_SYNTH=model-d  node $(pwd)/dist/index.js
+claude mcp add moog-model-15 -- env MOOG_MCP_SYNTH=model-15 MOOG_MCP_PORT_NAME="Moog Model 15 Out" node $(pwd)/dist/index.js
 ```
 
-Restart your MCP client. The Moog tools should appear in the tool palette.
+Restart your MCP client. Both sets of Moog tools should appear in the tool palette.
 
-### 5. Talk to the Moog
+## Talk to the Moogs
 
 Try prompts like:
 
-- _"Play a slow ambient C minor pad. Long attack, long release, lots of filter modulation, just floating."_
-- _"Set up a classic Minimoog bass: oscillator 1 at 16', oscillator 2 sawtooth slightly detuned, filter cutoff around 30%, emphasis around 70%, short envelope. Then play a walking bass line in E."_
-- _"Slowly sweep the filter cutoff from closed to fully open over 8 seconds while holding a low D drone."_
-- _"Make a sound like wind. No keyboard notes — use the noise generator with a slow filter modulation."_
+- _"Play a slow ambient C minor pad on the Model D. Long attack, long release, lots of filter modulation."_
+- _"Set up a classic Minimoog bass on the Model D: osc 1 at 16', osc 2 sawtooth slightly detuned, filter cutoff around 30%, emphasis 70%, short envelope. Play a walking bass line in E."_
+- _"Play a duet — Model D on bass, Model 15 on melody, in A minor."_
+- _"Use the Model 15's 960 sequencer to run an 8-step ostinato while the Model D holds a drone."_
+- _"Make wind on the Model 15: noise generator, slow filter modulation, no keyboard notes."_
 
 ## Configuration
 
-| Env var               | Default       | Purpose                                                                                                                |
-| --------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `MOOG_MCP_PORT_NAME`  | `Moog MCP Out` | Name of the virtual CoreMIDI port to create.                                                                           |
-| `MOOG_MCP_USE_PORT`   | _(unset)_     | If set, send to this **existing** MIDI output port name (e.g. `IAC Driver Bus 1`) instead of creating a virtual port. |
-| `MOOG_MCP_CHANNEL`    | `1`           | Default MIDI send channel (1–16). Each tool can override per call.                                                     |
+| Env var              | Default         | Purpose                                                                                                                    |
+| -------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `MOOG_MCP_SYNTH`     | `model-d`       | Which synth to control: `model-d` or `model-15`.                                                                          |
+| `MOOG_MCP_PORT_NAME` | `Moog MCP Out`  | Name of the virtual CoreMIDI port to create. **Must be unique per running instance.**                                      |
+| `MOOG_MCP_USE_PORT`  | _(unset)_       | If set, send to this **existing** MIDI output port name (e.g. `IAC Driver Bus 1`) instead of creating a virtual port.     |
+| `MOOG_MCP_CHANNEL`   | `1`             | Default MIDI send channel (1–16). Each tool call can override per-call.                                                    |
 
 ## Routing through IAC instead of a virtual port
 
-If the Model D app doesn't see `Moog MCP Out` for some reason, fall back to the IAC Driver:
+If an app doesn't see the virtual port, fall back to the IAC Driver:
 
 1. Open **Audio MIDI Setup** → **Window → Show MIDI Studio**.
-2. Double-click **IAC Driver**, check **Device is online**, and add a bus named e.g. `Moog Bus`.
-3. In the Model D app, select `IAC Driver Moog Bus` as the MIDI input source.
-4. Run the server with `MOOG_MCP_USE_PORT="IAC Driver Moog Bus"`.
-
-## Using with the Model 15 app
-
-The Model 15 is modular, so its CC implementation depends on what you've patched. The default behaviour:
-
-- The note-playing tools (`play_note`, `play_chord`, `play_sequence` with `note` events) work immediately — Model 15 responds to standard MIDI notes.
-- For knob automation, the Model 15 has its own MIDI Learn workflow (the **Settings → MIDI → MIDI Learn** panel). Map controls to whatever CC numbers you like and use the `send_raw_cc` tool, or extend [`src/model-d.ts`](src/model-d.ts) with a parallel control surface for whatever modules you've patched.
-
-A future enhancement would be to ship a second control-surface file for common Model 15 patches (West Coast, East Coast, etc.).
+2. Double-click **IAC Driver**, check **Device is online**, and add a bus named e.g. `Moog D Bus` / `Moog 15 Bus`.
+3. In the app, select the IAC bus as the MIDI input source.
+4. Run the server with `MOOG_MCP_USE_PORT="IAC Driver Moog D Bus"`.
 
 ## Development
 
@@ -178,17 +255,19 @@ npm run list-ports   # show all CoreMIDI ports
 
 The architecture is small and code-first by design:
 
-- [`src/model-d.ts`](src/model-d.ts) — declarative control surface map. Add or change a knob here.
+- [`src/model-d.ts`](src/model-d.ts) — Model D control surface map (40 controls). Add or change a knob here.
+- [`src/model-15.ts`](src/model-15.ts) — Model 15 control surface map (43 controls across 8 sections).
 - [`src/midi-engine.ts`](src/midi-engine.ts) — virtual port + held-note bookkeeping + sequence scheduler.
 - [`src/notes.ts`](src/notes.ts) — `"C4"` ↔ MIDI integer conversion.
-- [`src/index.ts`](src/index.ts) — MCP server, tool catalog, dispatcher.
+- [`src/index.ts`](src/index.ts) — MCP server, tool catalog, dispatcher. Reads `MOOG_MCP_SYNTH` at startup to select the active control surface.
 
 ## Why this design?
 
-- **Semantic tools, not raw CCs.** The agent shouldn't need to know that filter cutoff is CC74. It just calls `set_filter_cutoff({ value: 0.3 })`. The CC mapping is a deployment concern, owned by the Model D app's MIDI Learn workflow plus the table in [`src/model-d.ts`](src/model-d.ts).
-- **Typed positions for switches.** `set_oscillator_1_waveform({ position: "sawtooth" })` is far less error-prone than guessing what CC value 0..127 corresponds to which of the 7 waveform positions on the panel. The server does the math.
-- **Sequence scheduling lives server-side.** The agent shouldn't have to make N tool calls for an N-event sequence — that defeats the purpose. One `play_sequence` call, fire-and-forget, with a cancellation handle.
-- **Note names everywhere.** `"C4"`, `"F#3"`, `"Bb-1"` all work. So do raw integers.
+- **Semantic tools, not raw CCs.** The agent calls `set_lpf_cutoff({ value: 0.3 })`, not `send_raw_cc({ controller: 74, value: 38 })`. The CC mapping is a deployment concern, owned by the app's MIDI Learn workflow.
+- **Typed positions for switches.** `set_osc1_waveform({ position: "sawtooth" })` is far less error-prone than guessing which CC value maps to which of 7 waveform positions. The server does the math.
+- **One server binary, two instruments.** `MOOG_MCP_SYNTH` selects the control surface at startup. Run two instances with different port names to control both synths simultaneously.
+- **Sequence scheduling lives server-side.** One `play_sequence` call schedules an entire phrase. The agent doesn't make N round-trips for an N-event sequence.
+- **Note names everywhere.** `"C4"`, `"F#3"`, `"Bb2"` all work. So do raw MIDI integers.
 
 ## License
 
