@@ -381,6 +381,24 @@ const PERFORMANCE_TOOLS: Tool[] = [
       additionalProperties: false,
     },
   },
+  {
+    name: "setup_cc_map",
+    description:
+      `One-time setup assistant: fires every CC in the ${SYNTH_LABEL} control surface in sequence so you can MIDI-learn them all without typing a single CC number. Open the app's MIDI Learn panel (Settings → MIDI → Map CCs), then call this tool. It counts down with a configurable delay between each pulse — tap the matching control in the app when each one fires. Returns a timestamped checklist so you know exactly what to tap and when. When done, save the preset in the app (e.g. "Claude MCP").`,
+    inputSchema: {
+      type: "object",
+      properties: {
+        delay_ms: {
+          type: "integer",
+          minimum: 1000,
+          maximum: 10000,
+          default: 3000,
+          description: "Milliseconds between each CC pulse. Default 3000 (3 seconds per control). Increase if you need more time to tap each one.",
+        },
+      },
+      additionalProperties: false,
+    },
+  },
 ];
 
 const CONTROL_TOOLS: Tool[] = CONTROL_SURFACE.map(buildControlTool);
@@ -434,6 +452,8 @@ async function dispatch(
       return getActiveNotes();
     case "send_raw_cc":
       return sendRawCC(args);
+    case "setup_cc_map":
+      return setupCCMap(args);
   }
 
   // Control tools: name === `set_<id>`.
@@ -686,6 +706,48 @@ function sendRawCC(args: Record<string, unknown>) {
   const channel = args.channel as number | undefined;
   engine.cc(controller, value, channel);
   return ok(`Sent CC${controller} = ${value}.`);
+}
+
+function setupCCMap(args: Record<string, unknown>) {
+  const delayMs = (args.delay_ms as number | undefined) ?? 3000;
+
+  // Only controls with an assignable CC (excludes mod wheel CC1 which is
+  // hardcoded by the MIDI spec, and pitch wheel which uses pitch bend).
+  const controls = CONTROL_SURFACE.filter(
+    (c) => c.defaultCC !== undefined && c.kind !== "modWheel" && c.kind !== "pitchWheel",
+  );
+
+  // Schedule a brief CC pulse for each control, evenly spaced by delayMs.
+  const events: SequenceEvent[] = controls.map((c, i) => ({
+    kind: "cc" as const,
+    atMs: i * delayMs,
+    controller: c.defaultCC!,
+    value: 64, // mid-range pulse — any value triggers MIDI Learn
+  }));
+  const id = engine.scheduleSequence(events);
+
+  const totalSec = ((controls.length - 1) * delayMs) / 1000;
+  const lines = controls.map((c, i) => {
+    const t = ((i * delayMs) / 1000).toFixed(1);
+    return `  ${String(i + 1).padStart(2)}. [${t}s] ${c.panelLabel.padEnd(30)} CC${c.defaultCC}`;
+  });
+
+  return ok(
+    [
+      `CC map setup started — sequence "${id}".`,
+      `${controls.length} controls × ${delayMs / 1000}s each ≈ ${totalSec.toFixed(0)}s total.`,
+      "",
+      `In the ${SYNTH_LABEL} app, open Settings → MIDI → Map CCs.`,
+      "Tap each control listed below at the moment its pulse fires:",
+      "",
+      ...lines,
+      "",
+      `Mod Wheel (CC1) and Pitch Wheel are hardcoded by MIDI spec — skip them.`,
+      "",
+      `When done, save: Save/Load CC Map → Save → "Claude MCP".`,
+      `To abort early: call cancel_sequence with id "${id}".`,
+    ].join("\n"),
+  );
 }
 
 function ok(text: string) {

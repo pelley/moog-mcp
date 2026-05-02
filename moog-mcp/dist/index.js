@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 /**
- * Moog Model D MCP Server
+ * Moog Model D & Model 15 MIDI MCP Server
  *
- * Exposes the full Model D control surface as MCP tools, plus performance
- * tools for playing notes, sequences, and ambient textures. The agent talks
- * to this server; this server talks MIDI to the Model D / Model 15 app.
+ * Exposes the full control surface of either the Moog Model D or Moog Model 15
+ * app as MCP tools, plus performance tools for playing notes, sequences, and
+ * ambient textures. Which instrument is active is selected at startup via the
+ * MOOG_MCP_SYNTH env var ("model-d" or "model-15"; defaults to "model-d").
+ *
+ * Run two instances simultaneously — each with a unique MOOG_MCP_PORT_NAME —
+ * to control both synths at the same time.
  *
  * Transport: stdio (the MCP standard for desktop/local integrations).
  */
@@ -57,12 +61,11 @@ process.on("SIGTERM", () => shutdown("SIGTERM"));
 // ---- Tool catalog ----
 //
 // We expose:
-//   1. One tool per Model D control (set_<id>) - so the agent can
-//      "twiddle each knob" by name.
-//   2. Performance tools: play_note, play_chord, play_sequence,
-//      pitch_bend, panic, all_notes_off.
-//   3. Introspection tools: list_controls, list_midi_ports,
-//      get_default_cc_map, get_active_notes.
+//   1. One tool per synth control (set_<id>) — every knob, switch, and wheel
+//      on the active instrument's panel. Control surface is determined by
+//      MOOG_MCP_SYNTH at startup (model-d = 40 controls, model-15 = 43 controls).
+//   2. Performance tools: play_note, play_chord, play_sequence, panic.
+//   3. Introspection tools: list_controls, list_midi_ports, get_active_notes.
 //
 // Each control tool accepts either a `value` field whose type matches
 // the control kind, OR a raw `cc_value` 0..127 escape hatch.
@@ -336,6 +339,23 @@ const PERFORMANCE_TOOLS = [
             additionalProperties: false,
         },
     },
+    {
+        name: "setup_cc_map",
+        description: `One-time setup assistant: fires every CC in the ${SYNTH_LABEL} control surface in sequence so you can MIDI-learn them all without typing a single CC number. Open the app's MIDI Learn panel (Settings → MIDI → Map CCs), then call this tool. It counts down with a configurable delay between each pulse — tap the matching control in the app when each one fires. Returns a timestamped checklist so you know exactly what to tap and when. When done, save the preset in the app (e.g. "Claude MCP").`,
+        inputSchema: {
+            type: "object",
+            properties: {
+                delay_ms: {
+                    type: "integer",
+                    minimum: 1000,
+                    maximum: 10000,
+                    default: 3000,
+                    description: "Milliseconds between each CC pulse. Default 3000 (3 seconds per control). Increase if you need more time to tap each one.",
+                },
+            },
+            additionalProperties: false,
+        },
+    },
 ];
 const CONTROL_TOOLS = CONTROL_SURFACE.map(buildControlTool);
 const ALL_TOOLS = [...PERFORMANCE_TOOLS, ...CONTROL_TOOLS];
@@ -378,6 +398,8 @@ async function dispatch(name, args) {
             return getActiveNotes();
         case "send_raw_cc":
             return sendRawCC(args);
+        case "setup_cc_map":
+            return setupCCMap(args);
     }
     // Control tools: name === `set_<id>`.
     if (name.startsWith("set_")) {
@@ -588,6 +610,39 @@ function sendRawCC(args) {
     const channel = args.channel;
     engine.cc(controller, value, channel);
     return ok(`Sent CC${controller} = ${value}.`);
+}
+function setupCCMap(args) {
+    const delayMs = args.delay_ms ?? 3000;
+    // Only controls with an assignable CC (excludes mod wheel CC1 which is
+    // hardcoded by the MIDI spec, and pitch wheel which uses pitch bend).
+    const controls = CONTROL_SURFACE.filter((c) => c.defaultCC !== undefined && c.kind !== "modWheel" && c.kind !== "pitchWheel");
+    // Schedule a brief CC pulse for each control, evenly spaced by delayMs.
+    const events = controls.map((c, i) => ({
+        kind: "cc",
+        atMs: i * delayMs,
+        controller: c.defaultCC,
+        value: 64, // mid-range pulse — any value triggers MIDI Learn
+    }));
+    const id = engine.scheduleSequence(events);
+    const totalSec = ((controls.length - 1) * delayMs) / 1000;
+    const lines = controls.map((c, i) => {
+        const t = ((i * delayMs) / 1000).toFixed(1);
+        return `  ${String(i + 1).padStart(2)}. [${t}s] ${c.panelLabel.padEnd(30)} CC${c.defaultCC}`;
+    });
+    return ok([
+        `CC map setup started — sequence "${id}".`,
+        `${controls.length} controls × ${delayMs / 1000}s each ≈ ${totalSec.toFixed(0)}s total.`,
+        "",
+        `In the ${SYNTH_LABEL} app, open Settings → MIDI → Map CCs.`,
+        "Tap each control listed below at the moment its pulse fires:",
+        "",
+        ...lines,
+        "",
+        `Mod Wheel (CC1) and Pitch Wheel are hardcoded by MIDI spec — skip them.`,
+        "",
+        `When done, save: Save/Load CC Map → Save → "Claude MCP".`,
+        `To abort early: call cancel_sequence with id "${id}".`,
+    ].join("\n"));
 }
 function ok(text) {
     return { content: [{ type: "text", text }] };

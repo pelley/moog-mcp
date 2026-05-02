@@ -49,15 +49,14 @@ You should see your existing CoreMIDI devices. Once the server starts, its virtu
 
 The Model D app uses **user-defined CC mapping** rather than a fixed factory chart. Map each control once in the app, save it as a CC Map preset, and from then on the server's named tools will hit the right knobs.
 
-In the app: **Settings → MIDI → Map CCs**.
+The MCP server includes a `setup_cc_map` tool that handles this automatically — no terminal commands or manual CC number entry needed:
 
-For each control listed in [`src/model-d.ts`](src/model-d.ts):
+1. In the Model D app, open **Settings → MIDI → Map CCs**.
+2. Ask Claude: _"Run setup_cc_map for the Model D"_ (optionally add _"with a 4 second delay"_ if you need more time per control).
+3. The tool will print a numbered checklist with timestamps. Tap each control in the app at the moment its pulse fires — the app will learn the correct CC automatically.
+4. When done, save the preset: **Save/Load CC Map → Save → "Claude MCP"** (or any name you like).
 
-1. Tap the control on the panel (it highlights, awaiting MIDI Learn).
-2. Either:
-   - **Easy way:** send a probe CC from another terminal (replace `74` with the desired CC number): `node -e "import('easymidi').then(m => { const o = new m.Output('Moog MCP Out', true); setTimeout(() => { o.send('cc', { controller: 74, value: 64, channel: 0 }); }, 500); })"`
-   - **Manual way:** double-tap the control in the Map CCs view and type the CC number directly.
-3. After assigning every control, **save** the map: **Save/Load CC Map → Save → "Claude MCP"** (or any name you like).
+> **Note:** Mod Wheel (CC1) and Pitch Wheel are hardcoded by the MIDI spec and do not need to be mapped.
 
 #### Model D default CC map
 
@@ -123,9 +122,14 @@ The Model 15 server **must use a different port name** from the Model D server s
 
 ### 3b. Build the Model 15 CC Map preset (one-time setup)
 
-The Model 15 app also uses MIDI Learn. The process is the same as the Model D: go to **Settings → MIDI → MIDI Learn**, tap each module knob or switch, send the corresponding CC, and save the preset as e.g. "Claude MCP 15".
+The Model 15 app also uses MIDI Learn. The `setup_cc_map` tool works identically:
 
-The controls and their default CC numbers are defined in [`src/model-15.ts`](src/model-15.ts). The table below summarises them.
+1. In the Model 15 app, open **Settings → MIDI → MIDI Learn**.
+2. Ask Claude: _"Run setup_cc_map for the Model 15"_.
+3. Follow the printed checklist, tapping each module knob or switch in the app as its pulse fires.
+4. Save the preset as **"Claude MCP 15"** (or any name you like).
+
+The controls and their default CC numbers are defined in [`src/model-15.ts`](src/model-15.ts). The table below is for reference.
 
 #### Model 15 default CC map
 
