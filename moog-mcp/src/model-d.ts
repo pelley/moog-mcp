@@ -36,7 +36,7 @@ export interface ControlSpec {
   /** Human-friendly name as printed on the Model D panel. */
   panelLabel: string;
   /** Which physical section of the panel this lives on. */
-  section: Section;
+  section: string;
   /** Default CC number — user assigns this in the app's MAP CCs screen. */
   defaultCC?: number;
   /** Behaviour of the control. */
@@ -482,6 +482,15 @@ export const CONTROL_SURFACE: ControlSpec[] = [
     description:
       "Pitch bend wheel — sends 14-bit MIDI Pitch Bend. ±2 semitones by default in the Model D app (configurable in the app's Advanced settings up to ±24).",
   },
+];
+
+export const SECTIONS: readonly string[] = [
+  "controllers",
+  "oscillator-bank",
+  "mixer",
+  "modifiers",
+  "output",
+  "performance",
 ];
 
 /**

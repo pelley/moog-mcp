@@ -12,7 +12,23 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema, } from "@modelcontextprotocol/sdk/types.js";
 import * as easymidi from "easymidi";
-import { CONTROL_SURFACE, findControl, normalizedToCC, positionToCC, } from "./model-d.js";
+import { CONTROL_SURFACE as MODEL_D_SURFACE, SECTIONS as MODEL_D_SECTIONS, normalizedToCC, positionToCC, } from "./model-d.js";
+import { CONTROL_SURFACE as MODEL_15_SURFACE, SECTIONS as MODEL_15_SECTIONS, } from "./model-15.js";
+const SYNTH = (process.env.MOOG_MCP_SYNTH ?? "model-d").toLowerCase();
+if (SYNTH !== "model-d" && SYNTH !== "model-15") {
+    console.error(`[moog-mcp] Unknown MOOG_MCP_SYNTH "${SYNTH}". Valid values: model-d, model-15.`);
+    process.exit(1);
+}
+const CONTROL_SURFACE = SYNTH === "model-15" ? MODEL_15_SURFACE : MODEL_D_SURFACE;
+const SECTIONS = SYNTH === "model-15" ? MODEL_15_SECTIONS : MODEL_D_SECTIONS;
+const SYNTH_LABEL = SYNTH === "model-15" ? "Model 15" : "Model D";
+function findControl(id) {
+    const c = CONTROL_SURFACE.find((c) => c.id === id);
+    if (!c) {
+        throw new Error(`Unknown control: "${id}". Available: ${CONTROL_SURFACE.map((c) => c.id).join(", ")}`);
+    }
+    return c;
+}
 import { MoogMidiEngine } from "./midi-engine.js";
 import { noteName, parseNoteFlexible } from "./notes.js";
 // ---- Server config (env-overridable) ----
@@ -101,7 +117,7 @@ function buildControlTool(spec) {
             },
         };
     }
-    desc.push(`Default CC: ${spec.defaultCC}. (Map this CC in the Model D app's Map CCs panel.)`);
+    desc.push(`Default CC: ${spec.defaultCC}. (Map this CC in the ${SYNTH_LABEL} app's Map CCs panel.)`);
     if (spec.kind === "continuous") {
         desc.push("Value: 0.0 to 1.0. Translates to MIDI CC value 0–127.");
         return {
@@ -283,20 +299,13 @@ const PERFORMANCE_TOOLS = [
     },
     {
         name: "list_controls",
-        description: "Return the full Model D control surface map: every knob, switch, and wheel, with default CC numbers and current value semantics.",
+        description: `Return the full ${SYNTH_LABEL} control surface map: every knob, switch, and wheel, with default CC numbers and current value semantics.`,
         inputSchema: {
             type: "object",
             properties: {
                 section: {
                     type: "string",
-                    enum: [
-                        "controllers",
-                        "oscillator-bank",
-                        "mixer",
-                        "modifiers",
-                        "output",
-                        "performance",
-                    ],
+                    enum: SECTIONS,
                     description: "Filter to one panel section.",
                 },
             },
@@ -331,7 +340,7 @@ const PERFORMANCE_TOOLS = [
 const CONTROL_TOOLS = CONTROL_SURFACE.map(buildControlTool);
 const ALL_TOOLS = [...PERFORMANCE_TOOLS, ...CONTROL_TOOLS];
 // ---- MCP server wiring ----
-const server = new Server({ name: "moog-model-d", version: "0.1.0" }, { capabilities: { tools: {} } });
+const server = new Server({ name: `moog-${SYNTH}`, version: "0.1.0" }, { capabilities: { tools: {} } });
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
     tools: ALL_TOOLS,
 }));
@@ -545,7 +554,7 @@ function listControls(args) {
         const positions = c.positions ? ` [${c.positions.join(" | ")}]` : "";
         return `  ${c.id} (${cc}) — ${c.panelLabel}${positions}`;
     });
-    const header = `Model D control surface (${filtered.length} controls` +
+    const header = `${SYNTH_LABEL} control surface (${filtered.length} controls` +
         (section ? ` in ${section}` : "") +
         "):\n";
     return ok(header + lines.join("\n"));
@@ -587,7 +596,7 @@ function ok(text) {
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    console.error(`[moog-mcp] Ready. ${EXISTING_PORT ? `Sending to existing port "${EXISTING_PORT}".` : `Created virtual port "${VIRTUAL_PORT_NAME}".`} Default channel: ${DEFAULT_CHANNEL}. Tools exposed: ${ALL_TOOLS.length}.`);
+    console.error(`[moog-mcp] Ready (${SYNTH_LABEL}). ${EXISTING_PORT ? `Sending to existing port "${EXISTING_PORT}".` : `Created virtual port "${VIRTUAL_PORT_NAME}".`} Default channel: ${DEFAULT_CHANNEL}. Tools exposed: ${ALL_TOOLS.length}.`);
 }
 main().catch((err) => {
     console.error("[moog-mcp] fatal:", err);

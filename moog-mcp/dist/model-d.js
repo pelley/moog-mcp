@@ -414,6 +414,14 @@ export const CONTROL_SURFACE = [
         description: "Pitch bend wheel — sends 14-bit MIDI Pitch Bend. ±2 semitones by default in the Model D app (configurable in the app's Advanced settings up to ±24).",
     },
 ];
+export const SECTIONS = [
+    "controllers",
+    "oscillator-bank",
+    "mixer",
+    "modifiers",
+    "output",
+    "performance",
+];
 /**
  * Look up a control by id, throwing if unknown.
  */
