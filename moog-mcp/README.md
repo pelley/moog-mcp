@@ -1,4 +1,4 @@
-# Moog MCP Server
+# Moog Model D & Model 15 MIDI MCP Server
 
 A Model Context Protocol (MCP) server that exposes the **full control surfaces of the Moog Model D and Moog Model 15** apps as semantically named tools, so an LLM agent (Claude, etc.) can play notes, twiddle knobs, flip switches, and improvise synthesizer textures on your Mac.
 
