@@ -4,7 +4,25 @@
       "command": "node",
       "args": [
         "/Users/christopherpelley/Development/moog-mcp/moog-mcp/dist/index.js"
-      ]
+      ],
+      "env": { "MOOG_MCP_SYNTH": "model-d", "MOOG_MCP_CHANNEL": "1" }
+    },
+    "moog-model-15": {
+      "command": "node",
+      "args": [
+        "/Users/christopherpelley/Development/moog-mcp/moog-mcp/dist/index.js"
+      ],
+      "env": {
+        "MOOG_MCP_SYNTH": "model-15",
+        "MOOG_MCP_PORT_NAME": "Moog Model 15 Out",
+        "MOOG_MCP_CHANNEL": "1"
+      }
     }
+  },
+  "preferences": {
+    "coworkScheduledTasksEnabled": true,
+    "ccdScheduledTasksEnabled": true,
+    "sidebarMode": "epitaxy",
+    "coworkWebSearchEnabled": true
   }
 }
