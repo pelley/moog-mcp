@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 /**
- * Moog Model D MCP Server
+ * Moog Model D & Model 15 MIDI MCP Server
  *
- * Exposes the full Model D control surface as MCP tools, plus performance
- * tools for playing notes, sequences, and ambient textures. The agent talks
- * to this server; this server talks MIDI to the Model D / Model 15 app.
+ * Exposes the full control surface of either the Moog Model D or Moog Model 15
+ * app as MCP tools, plus performance tools for playing notes, sequences, and
+ * ambient textures. Which instrument is active is selected at startup via the
+ * MOOG_MCP_SYNTH env var ("model-d" or "model-15"; defaults to "model-d").
+ *
+ * Run two instances simultaneously — each with a unique MOOG_MCP_PORT_NAME —
+ * to control both synths at the same time.
  *
  * Transport: stdio (the MCP standard for desktop/local integrations).
  */
@@ -80,12 +84,11 @@ process.on("SIGTERM", () => shutdown("SIGTERM"));
 // ---- Tool catalog ----
 //
 // We expose:
-//   1. One tool per Model D control (set_<id>) - so the agent can
-//      "twiddle each knob" by name.
-//   2. Performance tools: play_note, play_chord, play_sequence,
-//      pitch_bend, panic, all_notes_off.
-//   3. Introspection tools: list_controls, list_midi_ports,
-//      get_default_cc_map, get_active_notes.
+//   1. One tool per synth control (set_<id>) — every knob, switch, and wheel
+//      on the active instrument's panel. Control surface is determined by
+//      MOOG_MCP_SYNTH at startup (model-d = 40 controls, model-15 = 43 controls).
+//   2. Performance tools: play_note, play_chord, play_sequence, panic.
+//   3. Introspection tools: list_controls, list_midi_ports, get_active_notes.
 //
 // Each control tool accepts either a `value` field whose type matches
 // the control kind, OR a raw `cc_value` 0..127 escape hatch.
