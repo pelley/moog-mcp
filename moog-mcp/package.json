@@ -1,0 +1,31 @@
+{
+  "name": "@chris/moog-model-d-mcp",
+  "version": "0.1.0",
+  "description": "MCP server that exposes the Moog Model D iOS/Mac app's full control surface as semantic tools, allowing an LLM agent to play notes, twiddle knobs, flip switches, and create ambient synthesizer output.",
+  "type": "module",
+  "bin": {
+    "moog-model-d-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "list-ports": "node dist/list-ports.js",
+    "smoke-test": "node dist/smoke-test.js",
+    "test": "tsx src/self-test.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "easymidi": "^3.2.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

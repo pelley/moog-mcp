@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "moog-model-d": {
+      "command": "node",
+      "args": [
+        "/Users/christopherpelley/Development/moog-mcp/moog-mcp/dist/index.js"
+      ]
+    }
+  }
+}
