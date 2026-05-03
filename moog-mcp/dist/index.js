@@ -348,7 +348,7 @@ const PERFORMANCE_TOOLS = [
                 delay_ms: {
                     type: "integer",
                     minimum: 1000,
-                    maximum: 10000,
+                    maximum: 60000,
                     default: 3000,
                     description: "Milliseconds between each CC pulse. Default 3000 (3 seconds per control). Increase if you need more time to tap each one.",
                 },
