@@ -1,0 +1,2887 @@
+{
+  "events": [
+    {
+      "kind": "note",
+      "at_ms": 0,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 0,
+      "control": "filter_emphasis",
+      "value": 0.4
+    },
+    {
+      "kind": "cc",
+      "at_ms": 0,
+      "control": "filter_cutoff",
+      "value": 0.3
+    },
+    {
+      "kind": "cc",
+      "at_ms": 0,
+      "control": "filter_contour_amount",
+      "value": 0.55
+    },
+    {
+      "kind": "note",
+      "at_ms": 600,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 1000,
+      "control": "filter_emphasis",
+      "value": 0.41
+    },
+    {
+      "kind": "note",
+      "at_ms": 1200,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 1500,
+      "control": "filter_cutoff",
+      "value": 0.351
+    },
+    {
+      "kind": "note",
+      "at_ms": 1800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 2000,
+      "control": "filter_emphasis",
+      "value": 0.42
+    },
+    {
+      "kind": "note",
+      "at_ms": 2400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "note",
+      "at_ms": 3000,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 3000,
+      "control": "filter_emphasis",
+      "value": 0.43
+    },
+    {
+      "kind": "cc",
+      "at_ms": 3000,
+      "control": "filter_cutoff",
+      "value": 0.341
+    },
+    {
+      "kind": "note",
+      "at_ms": 3600,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 4000,
+      "control": "filter_emphasis",
+      "value": 0.44
+    },
+    {
+      "kind": "note",
+      "at_ms": 4200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 4500,
+      "control": "filter_cutoff",
+      "value": 0.305
+    },
+    {
+      "kind": "note",
+      "at_ms": 4800,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 5000,
+      "control": "filter_emphasis",
+      "value": 0.45
+    },
+    {
+      "kind": "cc",
+      "at_ms": 5000,
+      "control": "filter_contour_amount",
+      "value": 0.567
+    },
+    {
+      "kind": "note",
+      "at_ms": 5400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 6000,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 6000,
+      "control": "filter_emphasis",
+      "value": 0.46
+    },
+    {
+      "kind": "cc",
+      "at_ms": 6000,
+      "control": "filter_cutoff",
+      "value": 0.317
+    },
+    {
+      "kind": "note",
+      "at_ms": 6600,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 7000,
+      "control": "filter_emphasis",
+      "value": 0.47
+    },
+    {
+      "kind": "note",
+      "at_ms": 7200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 7500,
+      "control": "filter_cutoff",
+      "value": 0.377
+    },
+    {
+      "kind": "note",
+      "at_ms": 7800,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 8000,
+      "control": "filter_emphasis",
+      "value": 0.48
+    },
+    {
+      "kind": "note",
+      "at_ms": 8400,
+      "note": "F2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "note",
+      "at_ms": 9000,
+      "note": "E2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 9000,
+      "control": "filter_emphasis",
+      "value": 0.489
+    },
+    {
+      "kind": "cc",
+      "at_ms": 9000,
+      "control": "filter_cutoff",
+      "value": 0.411
+    },
+    {
+      "kind": "note",
+      "at_ms": 9600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 10000,
+      "control": "filter_emphasis",
+      "value": 0.497
+    },
+    {
+      "kind": "cc",
+      "at_ms": 10000,
+      "control": "filter_contour_amount",
+      "value": 0.583
+    },
+    {
+      "kind": "note",
+      "at_ms": 10200,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 10500,
+      "control": "filter_cutoff",
+      "value": 0.384
+    },
+    {
+      "kind": "note",
+      "at_ms": 10800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 11000,
+      "control": "filter_emphasis",
+      "value": 0.506
+    },
+    {
+      "kind": "note",
+      "at_ms": 11400,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 12000,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 12000,
+      "control": "filter_emphasis",
+      "value": 0.515
+    },
+    {
+      "kind": "cc",
+      "at_ms": 12000,
+      "control": "filter_cutoff",
+      "value": 0.357
+    },
+    {
+      "kind": "note",
+      "at_ms": 12600,
+      "note": "D3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 13000,
+      "control": "filter_emphasis",
+      "value": 0.524
+    },
+    {
+      "kind": "note",
+      "at_ms": 13200,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 13500,
+      "control": "filter_cutoff",
+      "value": 0.391
+    },
+    {
+      "kind": "note",
+      "at_ms": 13800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 14000,
+      "control": "filter_emphasis",
+      "value": 0.532
+    },
+    {
+      "kind": "note",
+      "at_ms": 14400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "note",
+      "at_ms": 15000,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 15000,
+      "control": "filter_emphasis",
+      "value": 0.541
+    },
+    {
+      "kind": "cc",
+      "at_ms": 15000,
+      "control": "filter_cutoff",
+      "value": 0.451
+    },
+    {
+      "kind": "cc",
+      "at_ms": 15000,
+      "control": "filter_contour_amount",
+      "value": 0.6
+    },
+    {
+      "kind": "note",
+      "at_ms": 15600,
+      "note": "G3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 16000,
+      "control": "filter_emphasis",
+      "value": 0.55
+    },
+    {
+      "kind": "note",
+      "at_ms": 16200,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 16500,
+      "control": "filter_cutoff",
+      "value": 0.464
+    },
+    {
+      "kind": "note",
+      "at_ms": 16800,
+      "note": "D3",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 17000,
+      "control": "filter_emphasis",
+      "value": 0.559
+    },
+    {
+      "kind": "note",
+      "at_ms": 17400,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 18000,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 18000,
+      "control": "filter_emphasis",
+      "value": 0.568
+    },
+    {
+      "kind": "cc",
+      "at_ms": 18000,
+      "control": "filter_cutoff",
+      "value": 0.429
+    },
+    {
+      "kind": "note",
+      "at_ms": 18600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 19000,
+      "control": "filter_emphasis",
+      "value": 0.576
+    },
+    {
+      "kind": "note",
+      "at_ms": 19200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 19500,
+      "control": "filter_cutoff",
+      "value": 0.42
+    },
+    {
+      "kind": "note",
+      "at_ms": 19800,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 20000,
+      "control": "filter_emphasis",
+      "value": 0.585
+    },
+    {
+      "kind": "cc",
+      "at_ms": 20000,
+      "control": "filter_contour_amount",
+      "value": 0.617
+    },
+    {
+      "kind": "note",
+      "at_ms": 20400,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "note",
+      "at_ms": 21000,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 21000,
+      "control": "filter_emphasis",
+      "value": 0.594
+    },
+    {
+      "kind": "cc",
+      "at_ms": 21000,
+      "control": "filter_cutoff",
+      "value": 0.472
+    },
+    {
+      "kind": "note",
+      "at_ms": 21600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 22000,
+      "control": "filter_emphasis",
+      "value": 0.603
+    },
+    {
+      "kind": "note",
+      "at_ms": 22200,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 22500,
+      "control": "filter_cutoff",
+      "value": 0.524
+    },
+    {
+      "kind": "note",
+      "at_ms": 22800,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 23000,
+      "control": "filter_emphasis",
+      "value": 0.611
+    },
+    {
+      "kind": "note",
+      "at_ms": 23400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 24000,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 24000,
+      "control": "filter_emphasis",
+      "value": 0.62
+    },
+    {
+      "kind": "cc",
+      "at_ms": 24000,
+      "control": "filter_cutoff",
+      "value": 0.515
+    },
+    {
+      "kind": "note",
+      "at_ms": 24600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 25000,
+      "control": "filter_emphasis",
+      "value": 0.632
+    },
+    {
+      "kind": "cc",
+      "at_ms": 25000,
+      "control": "filter_contour_amount",
+      "value": 0.633
+    },
+    {
+      "kind": "note",
+      "at_ms": 25200,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 25500,
+      "control": "filter_cutoff",
+      "value": 0.48
+    },
+    {
+      "kind": "note",
+      "at_ms": 25800,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 26000,
+      "control": "filter_emphasis",
+      "value": 0.645
+    },
+    {
+      "kind": "note",
+      "at_ms": 26400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "note",
+      "at_ms": 27000,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 27000,
+      "control": "filter_emphasis",
+      "value": 0.657
+    },
+    {
+      "kind": "cc",
+      "at_ms": 27000,
+      "control": "filter_cutoff",
+      "value": 0.493
+    },
+    {
+      "kind": "note",
+      "at_ms": 27600,
+      "note": "F2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 28000,
+      "control": "filter_emphasis",
+      "value": 0.67
+    },
+    {
+      "kind": "note",
+      "at_ms": 28200,
+      "note": "E2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 28500,
+      "control": "filter_cutoff",
+      "value": 0.554
+    },
+    {
+      "kind": "note",
+      "at_ms": 28800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 29000,
+      "control": "filter_emphasis",
+      "value": 0.682
+    },
+    {
+      "kind": "note",
+      "at_ms": 29400,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 30000,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 30000,
+      "control": "filter_emphasis",
+      "value": 0.695
+    },
+    {
+      "kind": "cc",
+      "at_ms": 30000,
+      "control": "filter_cutoff",
+      "value": 0.589
+    },
+    {
+      "kind": "cc",
+      "at_ms": 30000,
+      "control": "filter_contour_amount",
+      "value": 0.65
+    },
+    {
+      "kind": "note",
+      "at_ms": 30600,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 31000,
+      "control": "filter_emphasis",
+      "value": 0.708
+    },
+    {
+      "kind": "note",
+      "at_ms": 31200,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 31500,
+      "control": "filter_cutoff",
+      "value": 0.567
+    },
+    {
+      "kind": "note",
+      "at_ms": 31800,
+      "note": "D3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 32000,
+      "control": "filter_emphasis",
+      "value": 0.72
+    },
+    {
+      "kind": "note",
+      "at_ms": 32400,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "note",
+      "at_ms": 33000,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 33000,
+      "control": "filter_emphasis",
+      "value": 0.732
+    },
+    {
+      "kind": "cc",
+      "at_ms": 33000,
+      "control": "filter_cutoff",
+      "value": 0.545
+    },
+    {
+      "kind": "note",
+      "at_ms": 33600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 34000,
+      "control": "filter_emphasis",
+      "value": 0.745
+    },
+    {
+      "kind": "note",
+      "at_ms": 34200,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 34500,
+      "control": "filter_cutoff",
+      "value": 0.584
+    },
+    {
+      "kind": "note",
+      "at_ms": 34800,
+      "note": "G3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 35000,
+      "control": "filter_emphasis",
+      "value": 0.757
+    },
+    {
+      "kind": "cc",
+      "at_ms": 35000,
+      "control": "filter_contour_amount",
+      "value": 0.672
+    },
+    {
+      "kind": "note",
+      "at_ms": 35400,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 36000,
+      "note": "D3",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 36000,
+      "control": "filter_emphasis",
+      "value": 0.77
+    },
+    {
+      "kind": "cc",
+      "at_ms": 36000,
+      "control": "filter_cutoff",
+      "value": 0.649
+    },
+    {
+      "kind": "note",
+      "at_ms": 36600,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 37000,
+      "control": "filter_emphasis",
+      "value": 0.782
+    },
+    {
+      "kind": "note",
+      "at_ms": 37200,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 37500,
+      "control": "filter_cutoff",
+      "value": 0.666
+    },
+    {
+      "kind": "note",
+      "at_ms": 37800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 38000,
+      "control": "filter_emphasis",
+      "value": 0.795
+    },
+    {
+      "kind": "note",
+      "at_ms": 38400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 38420,
+      "control": "filter_emphasis",
+      "value": 0.97
+    },
+    {
+      "kind": "cc",
+      "at_ms": 38750,
+      "control": "filter_emphasis",
+      "value": 0.78
+    },
+    {
+      "kind": "note",
+      "at_ms": 39000,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 39000,
+      "control": "filter_emphasis",
+      "value": 0.807
+    },
+    {
+      "kind": "cc",
+      "at_ms": 39000,
+      "control": "filter_cutoff",
+      "value": 0.635
+    },
+    {
+      "kind": "note",
+      "at_ms": 39600,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 40000,
+      "control": "filter_emphasis",
+      "value": 0.82
+    },
+    {
+      "kind": "cc",
+      "at_ms": 40000,
+      "control": "filter_contour_amount",
+      "value": 0.693
+    },
+    {
+      "kind": "cc",
+      "at_ms": 40000,
+      "control": "glide_rate",
+      "value": 0.22
+    },
+    {
+      "kind": "note",
+      "at_ms": 40200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 40500,
+      "control": "filter_cutoff",
+      "value": 0.63
+    },
+    {
+      "kind": "note",
+      "at_ms": 40800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 41000,
+      "control": "filter_emphasis",
+      "value": 0.83
+    },
+    {
+      "kind": "note",
+      "at_ms": 41400,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 42000,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 42000,
+      "control": "filter_emphasis",
+      "value": 0.84
+    },
+    {
+      "kind": "cc",
+      "at_ms": 42000,
+      "control": "filter_cutoff",
+      "value": 0.686
+    },
+    {
+      "kind": "note",
+      "at_ms": 42600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 43000,
+      "control": "filter_emphasis",
+      "value": 0.85
+    },
+    {
+      "kind": "note",
+      "at_ms": 43200,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 43500,
+      "control": "filter_cutoff",
+      "value": 0.742
+    },
+    {
+      "kind": "note",
+      "at_ms": 43800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 44000,
+      "control": "filter_emphasis",
+      "value": 0.86
+    },
+    {
+      "kind": "note",
+      "at_ms": 44400,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "note",
+      "at_ms": 45000,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 45000,
+      "control": "filter_emphasis",
+      "value": 0.87
+    },
+    {
+      "kind": "cc",
+      "at_ms": 45000,
+      "control": "filter_cutoff",
+      "value": 0.737
+    },
+    {
+      "kind": "cc",
+      "at_ms": 45000,
+      "control": "filter_contour_amount",
+      "value": 0.715
+    },
+    {
+      "kind": "note",
+      "at_ms": 45600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 46000,
+      "control": "filter_emphasis",
+      "value": 0.88
+    },
+    {
+      "kind": "note",
+      "at_ms": 46200,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 46500,
+      "control": "filter_cutoff",
+      "value": 0.663
+    },
+    {
+      "kind": "note",
+      "at_ms": 46800,
+      "note": "F2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 47000,
+      "control": "filter_emphasis",
+      "value": 0.89
+    },
+    {
+      "kind": "note",
+      "at_ms": 47400,
+      "note": "E2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 48000,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 48000,
+      "control": "filter_emphasis",
+      "value": 0.9
+    },
+    {
+      "kind": "cc",
+      "at_ms": 48000,
+      "control": "filter_cutoff",
+      "value": 0.638
+    },
+    {
+      "kind": "note",
+      "at_ms": 48600,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 49000,
+      "control": "filter_emphasis",
+      "value": 0.88
+    },
+    {
+      "kind": "note",
+      "at_ms": 49200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 49500,
+      "control": "filter_cutoff",
+      "value": 0.661
+    },
+    {
+      "kind": "note",
+      "at_ms": 49800,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 49920,
+      "control": "filter_emphasis",
+      "value": 0.97
+    },
+    {
+      "kind": "cc",
+      "at_ms": 50000,
+      "control": "filter_emphasis",
+      "value": 0.86
+    },
+    {
+      "kind": "cc",
+      "at_ms": 50000,
+      "control": "filter_contour_amount",
+      "value": 0.737
+    },
+    {
+      "kind": "cc",
+      "at_ms": 50250,
+      "control": "filter_emphasis",
+      "value": 0.78
+    },
+    {
+      "kind": "note",
+      "at_ms": 50400,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "note",
+      "at_ms": 51000,
+      "note": "D3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 51000,
+      "control": "filter_emphasis",
+      "value": 0.84
+    },
+    {
+      "kind": "cc",
+      "at_ms": 51000,
+      "control": "filter_cutoff",
+      "value": 0.657
+    },
+    {
+      "kind": "note",
+      "at_ms": 51600,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 52000,
+      "control": "filter_emphasis",
+      "value": 0.82
+    },
+    {
+      "kind": "note",
+      "at_ms": 52200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 52500,
+      "control": "filter_cutoff",
+      "value": 0.593
+    },
+    {
+      "kind": "note",
+      "at_ms": 52800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 53000,
+      "control": "filter_emphasis",
+      "value": 0.8
+    },
+    {
+      "kind": "note",
+      "at_ms": 53400,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 54000,
+      "note": "G3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 54000,
+      "control": "filter_emphasis",
+      "value": 0.78
+    },
+    {
+      "kind": "cc",
+      "at_ms": 54000,
+      "control": "filter_cutoff",
+      "value": 0.528
+    },
+    {
+      "kind": "note",
+      "at_ms": 54600,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 55000,
+      "control": "filter_emphasis",
+      "value": 0.823
+    },
+    {
+      "kind": "cc",
+      "at_ms": 55000,
+      "control": "filter_contour_amount",
+      "value": 0.758
+    },
+    {
+      "kind": "note",
+      "at_ms": 55200,
+      "note": "D3",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 55500,
+      "control": "filter_cutoff",
+      "value": 0.551
+    },
+    {
+      "kind": "note",
+      "at_ms": 55800,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 56000,
+      "control": "filter_emphasis",
+      "value": 0.865
+    },
+    {
+      "kind": "note",
+      "at_ms": 56400,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "note",
+      "at_ms": 57000,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 57000,
+      "control": "filter_emphasis",
+      "value": 0.907
+    },
+    {
+      "kind": "cc",
+      "at_ms": 57000,
+      "control": "filter_cutoff",
+      "value": 0.653
+    },
+    {
+      "kind": "note",
+      "at_ms": 57600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 58000,
+      "control": "filter_emphasis",
+      "value": 0.95
+    },
+    {
+      "kind": "note",
+      "at_ms": 58200,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 58500,
+      "control": "filter_cutoff",
+      "value": 0.706
+    },
+    {
+      "kind": "note",
+      "at_ms": 58800,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 59000,
+      "control": "filter_emphasis",
+      "value": 0.908
+    },
+    {
+      "kind": "note",
+      "at_ms": 59400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 60000,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 60000,
+      "control": "filter_emphasis",
+      "value": 0.867
+    },
+    {
+      "kind": "cc",
+      "at_ms": 60000,
+      "control": "filter_cutoff",
+      "value": 0.711
+    },
+    {
+      "kind": "cc",
+      "at_ms": 60000,
+      "control": "filter_contour_amount",
+      "value": 0.78
+    },
+    {
+      "kind": "note",
+      "at_ms": 60600,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 61000,
+      "control": "filter_emphasis",
+      "value": 0.825
+    },
+    {
+      "kind": "note",
+      "at_ms": 61200,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 61500,
+      "control": "filter_cutoff",
+      "value": 0.743
+    },
+    {
+      "kind": "note",
+      "at_ms": 61800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 62000,
+      "control": "filter_emphasis",
+      "value": 0.783
+    },
+    {
+      "kind": "cc",
+      "at_ms": 62220,
+      "control": "filter_emphasis",
+      "value": 0.97
+    },
+    {
+      "kind": "note",
+      "at_ms": 62400,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 62550,
+      "control": "filter_emphasis",
+      "value": 0.78
+    },
+    {
+      "kind": "note",
+      "at_ms": 63000,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 63000,
+      "control": "filter_emphasis",
+      "value": 0.742
+    },
+    {
+      "kind": "cc",
+      "at_ms": 63000,
+      "control": "filter_cutoff",
+      "value": 0.765
+    },
+    {
+      "kind": "note",
+      "at_ms": 63600,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 64000,
+      "control": "filter_emphasis",
+      "value": 0.7
+    },
+    {
+      "kind": "note",
+      "at_ms": 64200,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 64500,
+      "control": "filter_cutoff",
+      "value": 0.751
+    },
+    {
+      "kind": "note",
+      "at_ms": 64800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 65000,
+      "control": "filter_emphasis",
+      "value": 0.762
+    },
+    {
+      "kind": "cc",
+      "at_ms": 65000,
+      "control": "filter_contour_amount",
+      "value": 0.75
+    },
+    {
+      "kind": "note",
+      "at_ms": 65400,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 66000,
+      "note": "F2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 66000,
+      "control": "filter_emphasis",
+      "value": 0.825
+    },
+    {
+      "kind": "cc",
+      "at_ms": 66000,
+      "control": "filter_cutoff",
+      "value": 0.677
+    },
+    {
+      "kind": "note",
+      "at_ms": 66600,
+      "note": "E2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 67000,
+      "control": "filter_emphasis",
+      "value": 0.887
+    },
+    {
+      "kind": "note",
+      "at_ms": 67200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 67500,
+      "control": "filter_cutoff",
+      "value": 0.576
+    },
+    {
+      "kind": "note",
+      "at_ms": 67800,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 68000,
+      "control": "filter_emphasis",
+      "value": 0.95
+    },
+    {
+      "kind": "note",
+      "at_ms": 68400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "note",
+      "at_ms": 69000,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 69000,
+      "control": "filter_emphasis",
+      "value": 0.895
+    },
+    {
+      "kind": "cc",
+      "at_ms": 69000,
+      "control": "filter_cutoff",
+      "value": 0.524
+    },
+    {
+      "kind": "note",
+      "at_ms": 69600,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 70000,
+      "control": "filter_emphasis",
+      "value": 0.84
+    },
+    {
+      "kind": "cc",
+      "at_ms": 70000,
+      "control": "filter_contour_amount",
+      "value": 0.72
+    },
+    {
+      "kind": "note",
+      "at_ms": 70200,
+      "note": "D3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 70500,
+      "control": "filter_cutoff",
+      "value": 0.52
+    },
+    {
+      "kind": "note",
+      "at_ms": 70800,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 71000,
+      "control": "filter_emphasis",
+      "value": 0.785
+    },
+    {
+      "kind": "note",
+      "at_ms": 71400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 71720,
+      "control": "filter_emphasis",
+      "value": 0.97
+    },
+    {
+      "kind": "note",
+      "at_ms": 72000,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 72000,
+      "control": "filter_emphasis",
+      "value": 0.73
+    },
+    {
+      "kind": "cc",
+      "at_ms": 72000,
+      "control": "filter_cutoff",
+      "value": 0.489
+    },
+    {
+      "kind": "cc",
+      "at_ms": 72050,
+      "control": "filter_emphasis",
+      "value": 0.78
+    },
+    {
+      "kind": "note",
+      "at_ms": 72600,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 73000,
+      "control": "filter_emphasis",
+      "value": 0.675
+    },
+    {
+      "kind": "note",
+      "at_ms": 73200,
+      "note": "G3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 73500,
+      "control": "filter_cutoff",
+      "value": 0.499
+    },
+    {
+      "kind": "note",
+      "at_ms": 73800,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 74000,
+      "control": "filter_emphasis",
+      "value": 0.62
+    },
+    {
+      "kind": "note",
+      "at_ms": 74400,
+      "note": "D3",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "note",
+      "at_ms": 75000,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 75000,
+      "control": "filter_emphasis",
+      "value": 0.67
+    },
+    {
+      "kind": "cc",
+      "at_ms": 75000,
+      "control": "filter_cutoff",
+      "value": 0.51
+    },
+    {
+      "kind": "cc",
+      "at_ms": 75000,
+      "control": "filter_contour_amount",
+      "value": 0.69
+    },
+    {
+      "kind": "note",
+      "at_ms": 75600,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 76000,
+      "control": "filter_emphasis",
+      "value": 0.72
+    },
+    {
+      "kind": "note",
+      "at_ms": 76200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 76500,
+      "control": "filter_cutoff",
+      "value": 0.581
+    },
+    {
+      "kind": "note",
+      "at_ms": 76800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 77000,
+      "control": "filter_emphasis",
+      "value": 0.77
+    },
+    {
+      "kind": "note",
+      "at_ms": 77400,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 78000,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 78000,
+      "control": "filter_emphasis",
+      "value": 0.82
+    },
+    {
+      "kind": "cc",
+      "at_ms": 78000,
+      "control": "filter_cutoff",
+      "value": 0.679
+    },
+    {
+      "kind": "note",
+      "at_ms": 78600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 79000,
+      "control": "filter_emphasis",
+      "value": 0.87
+    },
+    {
+      "kind": "note",
+      "at_ms": 79200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 79500,
+      "control": "filter_cutoff",
+      "value": 0.729
+    },
+    {
+      "kind": "note",
+      "at_ms": 79800,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 80000,
+      "control": "filter_emphasis",
+      "value": 0.92
+    },
+    {
+      "kind": "cc",
+      "at_ms": 80000,
+      "control": "filter_contour_amount",
+      "value": 0.66
+    },
+    {
+      "kind": "cc",
+      "at_ms": 80000,
+      "control": "glide_rate",
+      "value": 0.3
+    },
+    {
+      "kind": "note",
+      "at_ms": 80400,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "note",
+      "at_ms": 81000,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 81000,
+      "control": "filter_emphasis",
+      "value": 0.865
+    },
+    {
+      "kind": "cc",
+      "at_ms": 81000,
+      "control": "filter_cutoff",
+      "value": 0.73
+    },
+    {
+      "kind": "note",
+      "at_ms": 81600,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 82000,
+      "control": "filter_emphasis",
+      "value": 0.81
+    },
+    {
+      "kind": "note",
+      "at_ms": 82200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 82500,
+      "control": "filter_cutoff",
+      "value": 0.722
+    },
+    {
+      "kind": "note",
+      "at_ms": 82800,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 83000,
+      "control": "filter_emphasis",
+      "value": 0.755
+    },
+    {
+      "kind": "note",
+      "at_ms": 83400,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 83420,
+      "control": "filter_emphasis",
+      "value": 0.97
+    },
+    {
+      "kind": "cc",
+      "at_ms": 83750,
+      "control": "filter_emphasis",
+      "value": 0.78
+    },
+    {
+      "kind": "note",
+      "at_ms": 84000,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 84000,
+      "control": "filter_emphasis",
+      "value": 0.7
+    },
+    {
+      "kind": "cc",
+      "at_ms": 84000,
+      "control": "filter_cutoff",
+      "value": 0.704
+    },
+    {
+      "kind": "note",
+      "at_ms": 84600,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 85000,
+      "control": "filter_emphasis",
+      "value": 0.765
+    },
+    {
+      "kind": "cc",
+      "at_ms": 85000,
+      "control": "filter_contour_amount",
+      "value": 0.63
+    },
+    {
+      "kind": "note",
+      "at_ms": 85200,
+      "note": "F2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 85500,
+      "control": "filter_cutoff",
+      "value": 0.686
+    },
+    {
+      "kind": "note",
+      "at_ms": 85800,
+      "note": "E2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 86000,
+      "control": "filter_emphasis",
+      "value": 0.83
+    },
+    {
+      "kind": "note",
+      "at_ms": 86400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "note",
+      "at_ms": 87000,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 87000,
+      "control": "filter_emphasis",
+      "value": 0.895
+    },
+    {
+      "kind": "cc",
+      "at_ms": 87000,
+      "control": "filter_cutoff",
+      "value": 0.607
+    },
+    {
+      "kind": "note",
+      "at_ms": 87600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 88000,
+      "control": "filter_emphasis",
+      "value": 0.96
+    },
+    {
+      "kind": "note",
+      "at_ms": 88200,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 88500,
+      "control": "filter_cutoff",
+      "value": 0.502
+    },
+    {
+      "kind": "note",
+      "at_ms": 88800,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 89000,
+      "control": "filter_emphasis",
+      "value": 0.908
+    },
+    {
+      "kind": "note",
+      "at_ms": 89400,
+      "note": "D3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 90000,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 90000,
+      "control": "filter_emphasis",
+      "value": 0.857
+    },
+    {
+      "kind": "cc",
+      "at_ms": 90000,
+      "control": "filter_cutoff",
+      "value": 0.445
+    },
+    {
+      "kind": "cc",
+      "at_ms": 90000,
+      "control": "filter_contour_amount",
+      "value": 0.6
+    },
+    {
+      "kind": "note",
+      "at_ms": 90600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 91000,
+      "control": "filter_emphasis",
+      "value": 0.805
+    },
+    {
+      "kind": "note",
+      "at_ms": 91200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 91420,
+      "control": "filter_emphasis",
+      "value": 0.97
+    },
+    {
+      "kind": "cc",
+      "at_ms": 91500,
+      "control": "filter_cutoff",
+      "value": 0.436
+    },
+    {
+      "kind": "cc",
+      "at_ms": 91750,
+      "control": "filter_emphasis",
+      "value": 0.78
+    },
+    {
+      "kind": "note",
+      "at_ms": 91800,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 92000,
+      "control": "filter_emphasis",
+      "value": 0.753
+    },
+    {
+      "kind": "note",
+      "at_ms": 92400,
+      "note": "G3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "note",
+      "at_ms": 93000,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 93000,
+      "control": "filter_emphasis",
+      "value": 0.702
+    },
+    {
+      "kind": "cc",
+      "at_ms": 93000,
+      "control": "filter_cutoff",
+      "value": 0.469
+    },
+    {
+      "kind": "note",
+      "at_ms": 93600,
+      "note": "D3",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 94000,
+      "control": "filter_emphasis",
+      "value": 0.65
+    },
+    {
+      "kind": "note",
+      "at_ms": 94200,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 94500,
+      "control": "filter_cutoff",
+      "value": 0.475
+    },
+    {
+      "kind": "note",
+      "at_ms": 94800,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 95000,
+      "control": "filter_emphasis",
+      "value": 0.723
+    },
+    {
+      "kind": "cc",
+      "at_ms": 95000,
+      "control": "filter_contour_amount",
+      "value": 0.583
+    },
+    {
+      "kind": "note",
+      "at_ms": 95400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 96000,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 96000,
+      "control": "filter_emphasis",
+      "value": 0.795
+    },
+    {
+      "kind": "cc",
+      "at_ms": 96000,
+      "control": "filter_cutoff",
+      "value": 0.481
+    },
+    {
+      "kind": "note",
+      "at_ms": 96600,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 97000,
+      "control": "filter_emphasis",
+      "value": 0.867
+    },
+    {
+      "kind": "note",
+      "at_ms": 97200,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 97500,
+      "control": "filter_cutoff",
+      "value": 0.548
+    },
+    {
+      "kind": "note",
+      "at_ms": 97800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 98000,
+      "control": "filter_emphasis",
+      "value": 0.94
+    },
+    {
+      "kind": "note",
+      "at_ms": 98400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "note",
+      "at_ms": 99000,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 99000,
+      "control": "filter_emphasis",
+      "value": 0.903
+    },
+    {
+      "kind": "cc",
+      "at_ms": 99000,
+      "control": "filter_cutoff",
+      "value": 0.641
+    },
+    {
+      "kind": "note",
+      "at_ms": 99600,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 100000,
+      "control": "filter_emphasis",
+      "value": 0.867
+    },
+    {
+      "kind": "cc",
+      "at_ms": 100000,
+      "control": "filter_contour_amount",
+      "value": 0.567
+    },
+    {
+      "kind": "note",
+      "at_ms": 100200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 100500,
+      "control": "filter_cutoff",
+      "value": 0.686
+    },
+    {
+      "kind": "note",
+      "at_ms": 100800,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 101000,
+      "control": "filter_emphasis",
+      "value": 0.83
+    },
+    {
+      "kind": "cc",
+      "at_ms": 101320,
+      "control": "filter_emphasis",
+      "value": 0.97
+    },
+    {
+      "kind": "note",
+      "at_ms": 101400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 101650,
+      "control": "filter_emphasis",
+      "value": 0.78
+    },
+    {
+      "kind": "note",
+      "at_ms": 102000,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 102000,
+      "control": "filter_emphasis",
+      "value": 0.793
+    },
+    {
+      "kind": "cc",
+      "at_ms": 102000,
+      "control": "filter_cutoff",
+      "value": 0.683
+    },
+    {
+      "kind": "note",
+      "at_ms": 102600,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 103000,
+      "control": "filter_emphasis",
+      "value": 0.757
+    },
+    {
+      "kind": "note",
+      "at_ms": 103200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 103500,
+      "control": "filter_cutoff",
+      "value": 0.631
+    },
+    {
+      "kind": "note",
+      "at_ms": 103800,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 104000,
+      "control": "filter_emphasis",
+      "value": 0.72
+    },
+    {
+      "kind": "note",
+      "at_ms": 104400,
+      "note": "F2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "note",
+      "at_ms": 105000,
+      "note": "E2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 105000,
+      "control": "filter_emphasis",
+      "value": 0.777
+    },
+    {
+      "kind": "cc",
+      "at_ms": 105000,
+      "control": "filter_cutoff",
+      "value": 0.64
+    },
+    {
+      "kind": "cc",
+      "at_ms": 105000,
+      "control": "filter_contour_amount",
+      "value": 0.55
+    },
+    {
+      "kind": "note",
+      "at_ms": 105600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 106000,
+      "control": "filter_emphasis",
+      "value": 0.835
+    },
+    {
+      "kind": "note",
+      "at_ms": 106200,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 106500,
+      "control": "filter_cutoff",
+      "value": 0.649
+    },
+    {
+      "kind": "note",
+      "at_ms": 106800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 107000,
+      "control": "filter_emphasis",
+      "value": 0.892
+    },
+    {
+      "kind": "note",
+      "at_ms": 107400,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 108000,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 108000,
+      "control": "filter_emphasis",
+      "value": 0.95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 108000,
+      "control": "filter_cutoff",
+      "value": 0.597
+    },
+    {
+      "kind": "note",
+      "at_ms": 108600,
+      "note": "D3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 109000,
+      "control": "filter_emphasis",
+      "value": 0.883
+    },
+    {
+      "kind": "note",
+      "at_ms": 109200,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 109500,
+      "control": "filter_cutoff",
+      "value": 0.519
+    },
+    {
+      "kind": "note",
+      "at_ms": 109800,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 109920,
+      "control": "filter_emphasis",
+      "value": 0.97
+    },
+    {
+      "kind": "cc",
+      "at_ms": 110000,
+      "control": "filter_emphasis",
+      "value": 0.817
+    },
+    {
+      "kind": "cc",
+      "at_ms": 110000,
+      "control": "filter_contour_amount",
+      "value": 0.533
+    },
+    {
+      "kind": "cc",
+      "at_ms": 110000,
+      "control": "glide_rate",
+      "value": 0.15
+    },
+    {
+      "kind": "cc",
+      "at_ms": 110250,
+      "control": "filter_emphasis",
+      "value": 0.78
+    },
+    {
+      "kind": "note",
+      "at_ms": 110400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "note",
+      "at_ms": 111000,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 111000,
+      "control": "filter_emphasis",
+      "value": 0.75
+    },
+    {
+      "kind": "cc",
+      "at_ms": 111000,
+      "control": "filter_cutoff",
+      "value": 0.489
+    },
+    {
+      "kind": "note",
+      "at_ms": 111600,
+      "note": "G3",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 112000,
+      "control": "filter_emphasis",
+      "value": 0.683
+    },
+    {
+      "kind": "note",
+      "at_ms": 112200,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 112500,
+      "control": "filter_cutoff",
+      "value": 0.506
+    },
+    {
+      "kind": "note",
+      "at_ms": 112800,
+      "note": "D3",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 113000,
+      "control": "filter_emphasis",
+      "value": 0.617
+    },
+    {
+      "kind": "note",
+      "at_ms": 113400,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 114000,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 114000,
+      "control": "filter_emphasis",
+      "value": 0.55
+    },
+    {
+      "kind": "cc",
+      "at_ms": 114000,
+      "control": "filter_cutoff",
+      "value": 0.494
+    },
+    {
+      "kind": "note",
+      "at_ms": 114600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 115000,
+      "control": "filter_emphasis",
+      "value": 0.525
+    },
+    {
+      "kind": "cc",
+      "at_ms": 115000,
+      "control": "filter_contour_amount",
+      "value": 0.517
+    },
+    {
+      "kind": "note",
+      "at_ms": 115200,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 115500,
+      "control": "filter_cutoff",
+      "value": 0.421
+    },
+    {
+      "kind": "note",
+      "at_ms": 115800,
+      "note": "E3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 116000,
+      "control": "filter_emphasis",
+      "value": 0.5
+    },
+    {
+      "kind": "note",
+      "at_ms": 116400,
+      "note": "G2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "note",
+      "at_ms": 117000,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 117000,
+      "control": "filter_emphasis",
+      "value": 0.475
+    },
+    {
+      "kind": "cc",
+      "at_ms": 117000,
+      "control": "filter_cutoff",
+      "value": 0.349
+    },
+    {
+      "kind": "note",
+      "at_ms": 117600,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 95
+    },
+    {
+      "kind": "cc",
+      "at_ms": 118000,
+      "control": "filter_emphasis",
+      "value": 0.45
+    },
+    {
+      "kind": "note",
+      "at_ms": 118200,
+      "note": "C3",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "note",
+      "at_ms": 118500,
+      "note": "A2",
+      "duration_ms": 1400,
+      "velocity": 90
+    },
+    {
+      "kind": "cc",
+      "at_ms": 118500,
+      "control": "filter_cutoff",
+      "value": 0.336
+    },
+    {
+      "kind": "note",
+      "at_ms": 118800,
+      "note": "B2",
+      "duration_ms": 540,
+      "velocity": 88
+    },
+    {
+      "kind": "cc",
+      "at_ms": 119000,
+      "control": "filter_emphasis",
+      "value": 0.425
+    },
+    {
+      "kind": "note",
+      "at_ms": 119400,
+      "note": "A2",
+      "duration_ms": 540,
+      "velocity": 80
+    },
+    {
+      "kind": "cc",
+      "at_ms": 120000,
+      "control": "filter_emphasis",
+      "value": 0.4
+    },
+    {
+      "kind": "cc",
+      "at_ms": 120000,
+      "control": "filter_cutoff",
+      "value": 0.351
+    },
+    {
+      "kind": "cc",
+      "at_ms": 120000,
+      "control": "filter_contour_amount",
+      "value": 0.5
+    }
+  ]
+}
