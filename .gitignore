@@ -4,3 +4,5 @@ node_modules/
 .claude/
 dist/
 moog-mcp/dist/
+scripts/
+moog-mcp/scripts/
