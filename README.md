@@ -192,7 +192,7 @@ For Claude Desktop, edit `~/Library/Application Support/Claude/claude_desktop_co
   "mcpServers": {
     "moog-model-d": {
       "command": "node",
-      "args": ["/absolute/path/to/moog-mcp/dist/index.js"],
+      "args": ["/absolute/path/to/dist/index.js"],
       "env": {
         "MOOG_MCP_SYNTH": "model-d",
         "MOOG_MCP_PORT_NAME": "Moog MCP Out",
@@ -201,7 +201,7 @@ For Claude Desktop, edit `~/Library/Application Support/Claude/claude_desktop_co
     },
     "moog-model-15": {
       "command": "node",
-      "args": ["/absolute/path/to/moog-mcp/dist/index.js"],
+      "args": ["/absolute/path/to/dist/index.js"],
       "env": {
         "MOOG_MCP_SYNTH": "model-15",
         "MOOG_MCP_PORT_NAME": "Moog Model 15 Out",
