@@ -255,7 +255,11 @@ If an app doesn't see the virtual port, fall back to the IAC Driver:
 npm run dev          # tsx watch mode
 npm run build        # compile to dist/
 npm run list-ports   # show all CoreMIDI ports
+npm test             # run self-test (TypeScript via tsx)
+npm run smoke-test   # run MIDI smoke test (uses dist/smoke-test.js)
 ```
+
+`npm run smoke-test` executes compiled code from `dist/`, so run `npm run build` first if needed.
 
 The architecture is small and code-first by design:
 
