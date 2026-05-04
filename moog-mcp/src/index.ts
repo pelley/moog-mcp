@@ -36,11 +36,14 @@ import {
 
 const SYNTH = (process.env.MOOG_MCP_SYNTH ?? "model-d").toLowerCase();
 if (SYNTH !== "model-d" && SYNTH !== "model-15") {
-  console.error(`[moog-mcp] Unknown MOOG_MCP_SYNTH "${SYNTH}". Valid values: model-d, model-15.`);
+  console.error(
+    `[moog-mcp] Unknown MOOG_MCP_SYNTH "${SYNTH}". Valid values: model-d, model-15.`,
+  );
   process.exit(1);
 }
 
-const CONTROL_SURFACE = SYNTH === "model-15" ? MODEL_15_SURFACE : MODEL_D_SURFACE;
+const CONTROL_SURFACE =
+  SYNTH === "model-15" ? MODEL_15_SURFACE : MODEL_D_SURFACE;
 const SECTIONS = SYNTH === "model-15" ? MODEL_15_SECTIONS : MODEL_D_SECTIONS;
 const SYNTH_LABEL = SYNTH === "model-15" ? "Model 15" : "Model D";
 
@@ -127,7 +130,9 @@ function buildControlTool(spec: ControlSpec): Tool {
   }
 
   if (spec.kind === "pitchWheel") {
-    desc.push("Sends 14-bit MIDI Pitch Bend. Value: -1.0 (full down) – +1.0 (full up). 0 = center.");
+    desc.push(
+      "Sends 14-bit MIDI Pitch Bend. Value: -1.0 (full down) – +1.0 (full up). 0 = center.",
+    );
     return {
       name: controlToolName(spec),
       description: desc.join("\n"),
@@ -148,7 +153,9 @@ function buildControlTool(spec: ControlSpec): Tool {
     };
   }
 
-  desc.push(`Default CC: ${spec.defaultCC}. (Map this CC in the ${SYNTH_LABEL} app's Map CCs panel.)`);
+  desc.push(
+    `Default CC: ${spec.defaultCC}. (Map this CC in the ${SYNTH_LABEL} app's Map CCs panel.)`,
+  );
 
   if (spec.kind === "continuous") {
     desc.push("Value: 0.0 to 1.0. Translates to MIDI CC value 0–127.");
@@ -162,7 +169,8 @@ function buildControlTool(spec: ControlSpec): Tool {
             type: "number",
             minimum: 0,
             maximum: 1,
-            description: "Knob position, 0.0 (fully counter-clockwise) to 1.0 (fully clockwise).",
+            description:
+              "Knob position, 0.0 (fully counter-clockwise) to 1.0 (fully clockwise).",
           },
           cc_value: {
             type: "integer",
@@ -338,7 +346,11 @@ const PERFORMANCE_TOOLS: Tool[] = [
     name: "panic",
     description:
       "Send All Notes Off + manual note-off for every held note, and cancel all running sequences. Use this if anything sounds stuck.",
-    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+    inputSchema: {
+      type: "object",
+      properties: {},
+      additionalProperties: false,
+    },
   },
   {
     name: "list_controls",
@@ -359,12 +371,20 @@ const PERFORMANCE_TOOLS: Tool[] = [
     name: "list_midi_ports",
     description:
       "List all MIDI output ports visible to the OS (so you can verify the Model D app sees the virtual port).",
-    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+    inputSchema: {
+      type: "object",
+      properties: {},
+      additionalProperties: false,
+    },
   },
   {
     name: "get_active_notes",
     description: "Return the currently held notes.",
-    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+    inputSchema: {
+      type: "object",
+      properties: {},
+      additionalProperties: false,
+    },
   },
   {
     name: "send_raw_cc",
@@ -383,8 +403,7 @@ const PERFORMANCE_TOOLS: Tool[] = [
   },
   {
     name: "setup_cc_map",
-    description:
-      `One-time setup assistant: fires every CC in the ${SYNTH_LABEL} control surface in sequence so you can MIDI-learn them all without typing a single CC number. Open the app's MIDI Learn panel (Settings → MIDI → Map CCs), then call this tool. It counts down with a configurable delay between each pulse — tap the matching control in the app when each one fires. Returns a timestamped checklist so you know exactly what to tap and when. When done, save the preset in the app (e.g. "Claude MCP").`,
+    description: `One-time setup assistant: fires every CC in the ${SYNTH_LABEL} control surface in sequence so you can MIDI-learn them all without typing a single CC number. Open the app's MIDI Learn panel (Settings → MIDI → Map CCs), then call this tool. It counts down with a configurable delay between each pulse — tap the matching control in the app when each one fires. Returns a timestamped checklist so you know exactly what to tap and when. When done, save the preset in the app (e.g. "Claude MCP").`,
     inputSchema: {
       type: "object",
       properties: {
@@ -393,7 +412,8 @@ const PERFORMANCE_TOOLS: Tool[] = [
           minimum: 1000,
           maximum: 60000,
           default: 3000,
-          description: "Milliseconds between each CC pulse. Default 3000 (3 seconds per control). Increase if you need more time to tap each one.",
+          description:
+            "Milliseconds between each CC pulse. Default 3000 (3 seconds per control). Increase if you need more time to tap each one.",
         },
       },
       additionalProperties: false,
@@ -714,7 +734,10 @@ function setupCCMap(args: Record<string, unknown>) {
   // Only controls with an assignable CC (excludes mod wheel CC1 which is
   // hardcoded by the MIDI spec, and pitch wheel which uses pitch bend).
   const controls = CONTROL_SURFACE.filter(
-    (c) => c.defaultCC !== undefined && c.kind !== "modWheel" && c.kind !== "pitchWheel",
+    (c) =>
+      c.defaultCC !== undefined &&
+      c.kind !== "modWheel" &&
+      c.kind !== "pitchWheel",
   );
 
   // Schedule a brief CC pulse for each control, evenly spaced by delayMs.
