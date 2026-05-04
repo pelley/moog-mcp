@@ -1,5 +1,5 @@
 {
-  "name": "@chris/moog-midi-mcp",
+  "name": "@pelley/moog-midi-mcp",
   "version": "0.1.0",
   "description": "MCP server that exposes the full control surfaces of the Moog Model D and Moog Model 15 Mac apps as semantic tools, allowing an LLM agent to play notes, twiddle knobs, flip switches, and create ambient synthesizer output.",
   "type": "module",
