@@ -7,6 +7,8 @@ Built in TypeScript on top of:
 - `@modelcontextprotocol/sdk` — MCP server transport (stdio)
 - `easymidi` — virtual MIDI port creation (CoreMIDI on macOS)
 
+<img width="1436" height="807" alt="image" src="https://github.com/user-attachments/assets/7c1c9837-b6b7-4f07-a09b-a37e6e4c22e9" />
+
 ## Overview
 
 - **One tool per panel control.** Every knob, switch, and wheel on each synth's panel is its own tool with a meaningful name and a typed value (number, boolean, or enum of named positions). `set_filter_cutoff`, `set_osc1_waveform`, `set_lpf_emphasis`, `set_env1_attack`, `set_seq_stages` — the agent never has to guess a CC number.
