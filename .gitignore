@@ -1,8 +1,6 @@
 .DS_Store
 *.tar.gz
-node_modules/
 .claude/
-dist/
+node_modules/
 moog-mcp/dist/
-scripts/
 moog-mcp/scripts/
