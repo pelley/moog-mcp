@@ -105,8 +105,36 @@ The MCP server includes a `setup_cc_map` tool that handles this automatically â€
 | Main Output On/Off          | 56  | switch                               |
 | A-440 Tuning Tone           | 57  | switch                               |
 | Glide On/Off                | 65  | MIDI standard Portamento On/Off      |
+| Decay On/Off (legacy)       | 58  | switch                               |
 | Mod Wheel                   | 1   | Fixed by MIDI spec                   |
 | Pitch Wheel                 | â€”   | 14-bit MIDI Pitch Bend (not a CC)    |
+| Noise / LFO                 | 66  | switch; selects modulation source    |
+| Osc 2 Filter EG             | 63  | switch; routes filter EG to Osc 2    |
+| ARP                         | 59  | switch                               |
+| ARP Rate                    | 67  |                                      |
+| ARP Pattern                 | 68  | switchN: UP/UP/DOWN/ORDERED/RANDOM   |
+| ARP Octave                  | 69  | switchN: 1/2/3                       |
+| ARP Gate Length             | 70  |                                      |
+| ARP Latch                   | 75  | switch                               |
+| Key Hold                    | 64  | switch; MIDI standard Sustain Pedal  |
+| Bender                      | 60  | switch                               |
+| Bender Rate                 | 76  |                                      |
+| Bender Depth                | 77  |                                      |
+| Bender Mix                  | 78  |                                      |
+| Bender Time                 | 79  |                                      |
+| Bender Feedback             | 80  |                                      |
+| Delay                       | 61  | switch                               |
+| Delay Time                  | 81  |                                      |
+| Delay Mix                   | 82  |                                      |
+| Delay Feedback              | 83  |                                      |
+| Delay Sync                  | 84  | switch                               |
+| Looper                      | 62  | switch                               |
+| Looper Play/Stop            | 85  | switch                               |
+| Looper Record               | 86  | switch                               |
+| Looper Overdub              | 87  | switch                               |
+| Looper Undo                 | 88  | switch                               |
+| Looper Clear                | 89  | switch                               |
+| Looper Share                | 90  | switch                               |
 
 ---
 
