@@ -83,6 +83,8 @@ npm run list-ports
 
 You should see your existing CoreMIDI devices. Once the server starts, its virtual port will join the list.
 
+[![Add MCP Server moog-model-d to LM Studio](https://files.lmstudio.ai/deeplink/mcp-install-dark.svg)](https://lmstudio.ai/install-mcp?name=moog-model-d&config=eyJjb21tYW5kIjoibm9kZSIsImFyZ3MiOlsiL3BhdGgvdG8vbW9vZy1tY3AvZGlzdC9pbmRleC5qcyJdfQ%3D%3D)
+
 ---
 
 ## Model D setup
