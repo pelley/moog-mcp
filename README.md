@@ -62,6 +62,8 @@ flowchart LR
     LFO slowly opens the filter"]
 
     U --> L --> M --> S
+
+    style M fill:#d0eaf8,stroke:#5ba3c9,color:#000
 ```
 
 ## Quick start
