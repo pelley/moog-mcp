@@ -33,19 +33,58 @@ import {
   CONTROL_SURFACE as MODEL_15_SURFACE,
   SECTIONS as MODEL_15_SECTIONS,
 } from "./model-15.js";
+import {
+  CONTROL_SURFACE as GRANDMOTHER_SURFACE,
+  SECTIONS as GRANDMOTHER_SECTIONS,
+} from "./grandmother.js";
+import {
+  CONTROL_SURFACE as MATRIARCH_SURFACE,
+  SECTIONS as MATRIARCH_SECTIONS,
+} from "./matriarch.js";
+import {
+  CONTROL_SURFACE as MESSENGER_SURFACE,
+  SECTIONS as MESSENGER_SECTIONS,
+} from "./messenger.js";
 
-const SYNTH = (process.env.MOOG_MCP_SYNTH ?? "model-d").toLowerCase();
-if (SYNTH !== "model-d" && SYNTH !== "model-15") {
+const VALID_SYNTHS = ["model-d", "model-15", "grandmother", "matriarch", "messenger"] as const;
+type SynthId = typeof VALID_SYNTHS[number];
+
+const SYNTH = (process.env.MOOG_MCP_SYNTH ?? "model-d").toLowerCase() as SynthId;
+if (!(VALID_SYNTHS as readonly string[]).includes(SYNTH)) {
   console.error(
-    `[moog-mcp] Unknown MOOG_MCP_SYNTH "${SYNTH}". Valid values: model-d, model-15.`,
+    `[moog-mcp] Unknown MOOG_MCP_SYNTH "${SYNTH}". Valid values: ${VALID_SYNTHS.join(", ")}.`,
   );
   process.exit(1);
 }
 
-const CONTROL_SURFACE =
-  SYNTH === "model-15" ? MODEL_15_SURFACE : MODEL_D_SURFACE;
-const SECTIONS = SYNTH === "model-15" ? MODEL_15_SECTIONS : MODEL_D_SECTIONS;
-const SYNTH_LABEL = SYNTH === "model-15" ? "Model 15" : "Model D";
+// Hardware synths have fixed CC assignments and connect via a real MIDI port.
+const IS_HARDWARE = SYNTH === "grandmother" || SYNTH === "matriarch" || SYNTH === "messenger";
+
+const SURFACE_MAP: Record<SynthId, ControlSpec[]> = {
+  "model-d": MODEL_D_SURFACE,
+  "model-15": MODEL_15_SURFACE,
+  "grandmother": GRANDMOTHER_SURFACE,
+  "matriarch": MATRIARCH_SURFACE,
+  "messenger": MESSENGER_SURFACE,
+};
+const SECTIONS_MAP: Record<SynthId, readonly string[]> = {
+  "model-d": MODEL_D_SECTIONS,
+  "model-15": MODEL_15_SECTIONS,
+  "grandmother": GRANDMOTHER_SECTIONS,
+  "matriarch": MATRIARCH_SECTIONS,
+  "messenger": MESSENGER_SECTIONS,
+};
+const LABEL_MAP: Record<SynthId, string> = {
+  "model-d": "Minimoog Model D",
+  "model-15": "Moog Model 15",
+  "grandmother": "Moog Grandmother",
+  "matriarch": "Moog Matriarch",
+  "messenger": "Moog Messenger",
+};
+
+const CONTROL_SURFACE = SURFACE_MAP[SYNTH];
+const SECTIONS = SECTIONS_MAP[SYNTH];
+const SYNTH_LABEL = LABEL_MAP[SYNTH];
 
 function findControl(id: string): ControlSpec {
   const c = CONTROL_SURFACE.find((c) => c.id === id);
@@ -153,9 +192,76 @@ function buildControlTool(spec: ControlSpec): Tool {
     };
   }
 
-  desc.push(
-    `Default CC: ${spec.defaultCC}. (Map this CC in the ${SYNTH_LABEL} app's Map CCs panel.)`,
-  );
+  if (IS_HARDWARE) {
+    desc.push(`CC: ${spec.defaultCC}.`);
+  } else {
+    desc.push(
+      `Default CC: ${spec.defaultCC}. (Map this CC in the ${SYNTH_LABEL} app's Map CCs panel.)`,
+    );
+  }
+
+  if (spec.kind === "continuous14") {
+    desc.push(
+      "Value: 0.0 to 1.0. Sends a 14-bit CC pair (MSB on CC " +
+        spec.defaultCC +
+        ", LSB on CC " +
+        (spec.defaultCC! + 32) +
+        ") for 16383-step resolution.",
+    );
+    return {
+      name: controlToolName(spec),
+      description: desc.join("\n"),
+      inputSchema: {
+        type: "object",
+        properties: {
+          value: {
+            type: "number",
+            minimum: 0,
+            maximum: 1,
+            description: "Knob position, 0.0 (min) to 1.0 (max).",
+          },
+          cc14_value: {
+            type: "integer",
+            minimum: 0,
+            maximum: 16383,
+            description: "Escape hatch: raw 14-bit value (0–16383).",
+          },
+          channel: { type: "integer", minimum: 1, maximum: 16 },
+        },
+        additionalProperties: false,
+      },
+    };
+  }
+
+  if (spec.kind === "bipolar14") {
+    desc.push(
+      "Value: -1.0 (maximum down) to +1.0 (maximum up). Center 0.0 = nominal (CC 8192). 14-bit resolution.",
+    );
+    return {
+      name: controlToolName(spec),
+      description: desc.join("\n"),
+      inputSchema: {
+        type: "object",
+        properties: {
+          value: {
+            type: "number",
+            minimum: -1,
+            maximum: 1,
+            description:
+              "Bipolar position: -1.0 = full down, 0.0 = center, +1.0 = full up.",
+          },
+          cc14_value: {
+            type: "integer",
+            minimum: 0,
+            maximum: 16383,
+            description: "Escape hatch: raw 14-bit value (0–16383, center=8192).",
+          },
+          channel: { type: "integer", minimum: 1, maximum: 16 },
+        },
+        additionalProperties: false,
+      },
+    };
+  }
 
   if (spec.kind === "continuous") {
     desc.push("Value: 0.0 to 1.0. Translates to MIDI CC value 0–127.");
@@ -268,8 +374,11 @@ const PERFORMANCE_TOOLS: Tool[] = [
   },
   {
     name: "play_chord",
-    description:
-      "Play multiple notes simultaneously for a given duration. Useful even though the Model D app caps polyphony at 4 voices.",
+    description: IS_HARDWARE
+      ? SYNTH === "matriarch"
+        ? "Play up to 4 notes simultaneously (Matriarch is 4-voice paraphonic — all voices share one filter)."
+        : "Play notes simultaneously. Note: the Grandmother and Messenger are monophonic; only the lowest/highest note will sound."
+      : "Play multiple notes simultaneously for a given duration. Useful even though the Model D app caps polyphony at 4 voices.",
     inputSchema: {
       type: "object",
       properties: {
@@ -401,24 +510,28 @@ const PERFORMANCE_TOOLS: Tool[] = [
       additionalProperties: false,
     },
   },
-  {
-    name: "setup_cc_map",
-    description: `One-time setup assistant: fires every CC in the ${SYNTH_LABEL} control surface in sequence so you can MIDI-learn them all without typing a single CC number. Open the app's MIDI Learn panel (Settings → MIDI → Map CCs), then call this tool. It counts down with a configurable delay between each pulse — tap the matching control in the app when each one fires. Returns a timestamped checklist so you know exactly what to tap and when. When done, save the preset in the app (e.g. "Claude MCP").`,
-    inputSchema: {
-      type: "object",
-      properties: {
-        delay_ms: {
-          type: "integer",
-          minimum: 1000,
-          maximum: 60000,
-          default: 3000,
-          description:
-            "Milliseconds between each CC pulse. Default 3000 (3 seconds per control). Increase if you need more time to tap each one.",
-        },
-      },
-      additionalProperties: false,
-    },
-  },
+  ...(IS_HARDWARE
+    ? []
+    : [
+        {
+          name: "setup_cc_map",
+          description: `One-time setup assistant: fires every CC in the ${SYNTH_LABEL} control surface in sequence so you can MIDI-learn them all without typing a single CC number. Open the app's MIDI Learn panel (Settings → MIDI → Map CCs), then call this tool. It counts down with a configurable delay between each pulse — tap the matching control in the app when each one fires. Returns a timestamped checklist so you know exactly what to tap and when. When done, save the preset in the app (e.g. "Claude MCP").`,
+          inputSchema: {
+            type: "object",
+            properties: {
+              delay_ms: {
+                type: "integer",
+                minimum: 1000,
+                maximum: 60000,
+                default: 3000,
+                description:
+                  "Milliseconds between each CC pulse. Default 3000 (3 seconds per control). Increase if you need more time to tap each one.",
+              },
+            },
+            additionalProperties: false,
+          },
+        } as Tool,
+      ]),
 ];
 
 const CONTROL_TOOLS: Tool[] = CONTROL_SURFACE.map(buildControlTool);
@@ -473,6 +586,10 @@ async function dispatch(
     case "send_raw_cc":
       return sendRawCC(args);
     case "setup_cc_map":
+      if (IS_HARDWARE)
+        throw new Error(
+          `${SYNTH_LABEL} uses fixed CC assignments — no MIDI Learn setup needed.`,
+        );
       return setupCCMap(args);
   }
 
@@ -515,7 +632,7 @@ function playChord(args: Record<string, unknown>) {
 
 function playSequence(args: Record<string, unknown>) {
   const rawEvents = args.events as Array<Record<string, unknown>>;
-  const events: SequenceEvent[] = rawEvents.map((e) => translateSeqEvent(e));
+  const events: SequenceEvent[] = rawEvents.flatMap((e) => translateSeqEvent(e));
   const id = engine.scheduleSequence(events);
   const horizon = events.reduce(
     (m, e) => Math.max(m, e.atMs + ("durationMs" in e ? e.durationMs : 0)),
@@ -526,7 +643,7 @@ function playSequence(args: Record<string, unknown>) {
   );
 }
 
-function translateSeqEvent(e: Record<string, unknown>): SequenceEvent {
+function translateSeqEvent(e: Record<string, unknown>): SequenceEvent | SequenceEvent[] {
   const at_ms = e.at_ms as number;
   const channel = e.channel as number | undefined;
   const kind = e.kind as string;
@@ -541,30 +658,39 @@ function translateSeqEvent(e: Record<string, unknown>): SequenceEvent {
     };
   }
   if (kind === "cc") {
-    let controller: number;
-    let value: number;
     if (e.control !== undefined) {
-      // Use control-id semantics.
       const spec = findControl(e.control as string);
-      if (spec.kind === "modWheel") {
-        controller = 1;
-      } else if (spec.kind === "pitchWheel") {
+      if (spec.kind === "pitchWheel") {
         throw new Error(
           "pitchWheel cannot be sent as a CC; use kind: 'pitch_bend' instead.",
         );
-      } else if (spec.defaultCC === undefined) {
-        throw new Error(`Control ${spec.id} has no CC mapping`);
-      } else {
-        controller = spec.defaultCC;
       }
-      value = resolveValueForControl(spec, e);
+      if (spec.kind === "modWheel") {
+        const value = resolveValueForControl(spec, e);
+        return { kind: "cc", atMs: at_ms, controller: 1, value, channel };
+      }
+      if (spec.defaultCC === undefined) {
+        throw new Error(`Control ${spec.id} has no CC mapping`);
+      }
+      // 14-bit controls: emit MSB + LSB as two sequential CC events.
+      if (spec.kind === "continuous14" || spec.kind === "bipolar14") {
+        const v14 = resolve14bitValue(spec, e);
+        const msb = (v14 >> 7) & 0x7f;
+        const lsb = v14 & 0x7f;
+        return [
+          { kind: "cc", atMs: at_ms, controller: spec.defaultCC, value: msb, channel },
+          { kind: "cc", atMs: at_ms, controller: spec.defaultCC + 32, value: lsb, channel },
+        ];
+      }
+      const value = resolveValueForControl(spec, e);
+      return { kind: "cc", atMs: at_ms, controller: spec.defaultCC, value, channel };
     } else {
-      controller = e.controller as number;
-      value =
+      const controller = e.controller as number;
+      const value =
         (e.cc_value as number | undefined) ??
         Math.round(((e.value as number) ?? 0) * 127);
+      return { kind: "cc", atMs: at_ms, controller, value, channel };
     }
-    return { kind: "cc", atMs: at_ms, controller, value, channel };
   }
   if (kind === "pitch_bend") {
     return {
@@ -583,6 +709,10 @@ function translateSeqEvent(e: Record<string, unknown>): SequenceEvent {
  *   - value (number 0..1) for continuous
  *   - on (boolean) for switch2
  *   - position (string) for switch3 / switchN
+ */
+/**
+ * Resolve the 7-bit CC value for non-14-bit controls.
+ * Returns a number in 0..127.
  */
 function resolveValueForControl(
   spec: ControlSpec,
@@ -606,7 +736,7 @@ function resolveValueForControl(
     case "switch2":
       if (typeof args.on !== "boolean")
         throw new Error("Expected `on` boolean or `cc_value`");
-      return args.on ? 127 : 0;
+      return args.on ? (spec.onValue ?? 127) : 0;
     case "switch3": {
       const pos = args.position as "low" | "mid" | "high" | undefined;
       if (pos !== "low" && pos !== "mid" && pos !== "high")
@@ -623,7 +753,43 @@ function resolveValueForControl(
       throw new Error(
         "Pitch wheel uses pitch-bend, not CC. Use the set_pitch_wheel tool path.",
       );
+    case "continuous14":
+    case "bipolar14":
+      throw new Error(
+        `Control ${spec.id} is 14-bit — use resolve14bitValue() instead.`,
+      );
   }
+}
+
+/**
+ * Resolve a 14-bit value (0–16383) for continuous14 / bipolar14 controls.
+ */
+function resolve14bitValue(
+  spec: ControlSpec,
+  args: Record<string, unknown>,
+): number {
+  if (typeof args.cc14_value === "number") {
+    if (
+      !Number.isInteger(args.cc14_value) ||
+      args.cc14_value < 0 ||
+      args.cc14_value > 16383
+    )
+      throw new Error("cc14_value must be integer 0..16383");
+    return args.cc14_value;
+  }
+  if (spec.kind === "continuous14") {
+    if (typeof args.value !== "number")
+      throw new Error("Expected `value` (0.0–1.0) or `cc14_value`");
+    const clamped = Math.max(0, Math.min(1, args.value));
+    return Math.round(clamped * 16383);
+  }
+  if (spec.kind === "bipolar14") {
+    if (typeof args.value !== "number")
+      throw new Error("Expected `value` (-1.0–+1.0) or `cc14_value`");
+    const clamped = Math.max(-1, Math.min(1, args.value));
+    return Math.round(((clamped + 1) / 2) * 16383);
+  }
+  throw new Error(`resolve14bitValue called on non-14-bit kind: ${spec.kind}`);
 }
 
 function setControl(id: string, args: Record<string, unknown>) {
@@ -645,6 +811,15 @@ function setControl(id: string, args: Record<string, unknown>) {
 
   if (spec.defaultCC === undefined)
     throw new Error(`Control ${id} has no CC mapping`);
+
+  if (spec.kind === "continuous14" || spec.kind === "bipolar14") {
+    const v14 = resolve14bitValue(spec, args);
+    engine.cc14bit(spec.defaultCC, v14, channel);
+    return ok(
+      `${spec.panelLabel} -> CC${spec.defaultCC}+${spec.defaultCC + 32} = ${v14} (14-bit)`,
+    );
+  }
+
   const cc = resolveValueForControl(spec, args);
   engine.cc(spec.defaultCC, cc, channel);
 
@@ -678,7 +853,14 @@ function listControls(args: Record<string, unknown>) {
     ? CONTROL_SURFACE.filter((c) => c.section === section)
     : CONTROL_SURFACE;
   const lines = filtered.map((c) => {
-    const cc = c.defaultCC !== undefined ? `CC${c.defaultCC}` : c.kind;
+    let cc: string;
+    if (c.kind === "continuous14" || c.kind === "bipolar14") {
+      cc = `CC${c.defaultCC}+${c.defaultCC! + 32} (14-bit)`;
+    } else if (c.defaultCC !== undefined) {
+      cc = `CC${c.defaultCC}`;
+    } else {
+      cc = c.kind;
+    }
     const positions = c.positions ? ` [${c.positions.join(" | ")}]` : "";
     return `  ${c.id} (${cc}) — ${c.panelLabel}${positions}`;
   });
@@ -782,6 +964,11 @@ function ok(text: string) {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
+  if (IS_HARDWARE && !EXISTING_PORT) {
+    console.error(
+      `[moog-mcp] WARNING: ${SYNTH_LABEL} is a hardware synth. Set MOOG_MCP_USE_PORT to the synth's MIDI port name (run list_midi_ports to find it). A virtual port has been created as a fallback but will not reach the hardware.`,
+    );
+  }
   console.error(
     `[moog-mcp] Ready (${SYNTH_LABEL}). ${EXISTING_PORT ? `Sending to existing port "${EXISTING_PORT}".` : `Created virtual port "${VIRTUAL_PORT_NAME}".`} Default channel: ${DEFAULT_CHANNEL}. Tools exposed: ${ALL_TOOLS.length}.`,
   );

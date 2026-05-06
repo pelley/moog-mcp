@@ -124,6 +124,27 @@ export class MoogMidiEngine {
     });
   }
 
+  /**
+   * Send a 14-bit Control Change pair (MSB + LSB).
+   * controller must be 0–31; LSB is sent on controller+32.
+   * value14 is 0–16383.
+   */
+  cc14bit(controller: number, value14: number, channel?: number): void {
+    if (!Number.isInteger(controller) || controller < 0 || controller > 31)
+      throw new Error(`14-bit CC controller must be 0..31, got ${controller}`);
+    if (!Number.isInteger(value14) || value14 < 0 || value14 > 16383)
+      throw new Error(`14-bit value must be 0..16383, got ${value14}`);
+    const c = this.ch(channel);
+    const msb = (value14 >> 7) & 0x7f;
+    const lsb = value14 & 0x7f;
+    this.output.send("cc", { controller, value: msb, channel: c as Channel });
+    this.output.send("cc", {
+      controller: controller + 32,
+      value: lsb,
+      channel: c as Channel,
+    });
+  }
+
   /** Send a Control Change message. */
   cc(controller: number, value: number, channel?: number): void {
     this.assertCC(controller);

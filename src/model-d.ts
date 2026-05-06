@@ -23,12 +23,14 @@
  */
 
 export type ControlKind =
-  | "continuous" // 0.0 – 1.0 → 0–127
-  | "switch2" // off / on
-  | "switch3" // pos1 / pos2 / pos3
-  | "switchN" // n discrete positions
-  | "modWheel" // CC1, fixed
-  | "pitchWheel"; // 14-bit pitch bend
+  | "continuous"    // 0.0 – 1.0 → 0–127
+  | "continuous14"  // 0.0 – 1.0 → 0–16383 (14-bit, sends CC n + CC n+32)
+  | "bipolar14"     // -1.0 – +1.0 → 0–16383, center 0.0 = 8192
+  | "switch2"       // off / on
+  | "switch3"       // pos1 / pos2 / pos3
+  | "switchN"       // n discrete positions
+  | "modWheel"      // CC1, fixed
+  | "pitchWheel";   // 14-bit pitch bend
 
 export interface ControlSpec {
   /** Stable identifier used by the agent (e.g. "filter_cutoff"). */
@@ -43,9 +45,20 @@ export interface ControlSpec {
   kind: ControlKind;
   /**
    * For switchN: ordered list of position labels (low → high).
-   * The label index maps to evenly spaced CC values in 0..127.
+   * The label index maps to evenly spaced CC values in 0..127 unless
+   * positionValues is specified.
    */
   positions?: string[];
+  /**
+   * For switchN: explicit CC values per position (same length as positions).
+   * Overrides the evenly-distributed default.
+   */
+  positionValues?: number[];
+  /**
+   * For switch2: CC value sent for the "on" state (default 127).
+   * Some Moog hardware (Grandmother, Matriarch) documents 64 as the on-value.
+   */
+  onValue?: number;
   /** Tooltip-quality description for the LLM. */
   description: string;
 }
@@ -742,6 +755,7 @@ export function positionToCC(spec: ControlSpec, label: string): number {
       `Unknown position "${label}" for ${spec.id}. Valid: ${spec.positions.join(", ")}`,
     );
   }
+  if (spec.positionValues) return spec.positionValues[idx];
   // Spread n positions evenly across 0..127.
   const n = spec.positions.length;
   if (n === 1) return 64;

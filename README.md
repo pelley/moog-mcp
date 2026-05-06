@@ -1,22 +1,33 @@
-# Moog Model D & Model 15 MIDI MCP Server
+# Moog MIDI MCP Server
 
-A Model Context Protocol (MCP) server that exposes the full control surfaces of the Moog Model D and Moog Model 15 apps as semantically named tools, so an LLM agent (Claude, etc.) can play notes, twiddle knobs, flip switches, and improvise synthesizer textures on your Mac.
+A Model Context Protocol (MCP) server that exposes the full control surfaces of five Moog synthesizers as semantically named tools, so an LLM agent (Claude, etc.) can play notes, twiddle knobs, flip switches, and improvise synthesizer textures on your Mac.
+
+**Supported synths:**
+
+| `MOOG_MCP_SYNTH` | Instrument | Type | Tools |
+|---|---|---|---|
+| `model-d` | Minimoog Model D *(app)* | Virtual port | 81 |
+| `model-15` | Moog Model 15 *(app)* | Virtual port | 53 |
+| `grandmother` | Moog Grandmother *(hardware)* | USB/DIN MIDI | 32 |
+| `matriarch` | Moog Matriarch *(hardware)* | USB/DIN MIDI | 48 |
+| `messenger` | Moog Messenger *(hardware)* | USB-C MIDI | 66 |
 
 Built in TypeScript on top of:
 
 - `@modelcontextprotocol/sdk` — MCP server transport (stdio)
-- `easymidi` — virtual MIDI port creation (CoreMIDI on macOS)
+- `easymidi` — virtual and hardware MIDI port access (CoreMIDI on macOS)
 
 <img width="1436" height="807" alt="image" src="https://github.com/user-attachments/assets/7c1c9837-b6b7-4f07-a09b-a37e6e4c22e9" />
 
 ## Overview
 
-- **One tool per panel control.** Every knob, switch, and wheel on each synth's panel is its own tool with a meaningful name and a typed value (number, boolean, or enum of named positions). `set_filter_cutoff`, `set_osc1_waveform`, `set_lpf_emphasis`, `set_env1_attack`, `set_seq_stages` — the agent never has to guess a CC number.
-- **Both synths supported.** The same server binary handles the Model D (40 controls) and the Model 15 (43 controls). Select which instrument at startup via an env var; run two instances simultaneously for duets.
+- **One tool per panel control.** Every MIDI-controllable knob, switch, and wheel on each synth is its own tool with a meaningful name and typed value. `set_filter_cutoff`, `set_osc1_waveshape`, `set_amp_eg_attack` — the agent never guesses a CC number.
+- **Five synths, one binary.** Select the instrument via `MOOG_MCP_SYNTH`. Run multiple instances simultaneously for duets or layering.
+- **App synths vs. hardware synths.** App synths (Model D, Model 15) use a virtual CoreMIDI port and require a one-time MIDI Learn setup. Hardware synths (Grandmother, Matriarch, Messenger) have fixed CC assignments and connect directly over USB or DIN MIDI — no MIDI Learn needed.
+- **14-bit CC for hardware.** The Grandmother and Messenger use 14-bit CC pairs (MSB + LSB) for high-resolution control of key parameters. The server sends both bytes automatically.
 - **Performance tools.** `play_note`, `play_chord`, `play_sequence`, `panic`, `get_active_notes`.
-- **Sequence scheduling** for ambient textures: drop a list of timed events (notes + CC changes + pitch bends) and the server fires them with millisecond precision.
-- **Safe panic.** The agent (or you) can stop everything cleanly: All Notes Off plus explicit Note Off for every held note, plus cancellation of all in-flight sequences.
-- **Virtual port out of the box.** A CoreMIDI source appears in the app's MIDI Input list automatically. No IAC fiddling required.
+- **Sequence scheduling** for ambient textures: drop a list of timed events (notes + CC changes + pitch bends) and the server fires them with millisecond precision. 14-bit CC events in sequences are automatically split into their MSB+LSB pair.
+- **Safe panic.** All Notes Off + explicit note-off for every held note + sequence cancellation.
 
 ## Quick start
 
@@ -211,9 +222,154 @@ The controls and their default CC numbers are defined in [`src/model-15.ts`](src
 
 ---
 
+## Hardware synth setup (Grandmother, Matriarch, Messenger)
+
+Hardware synths have fixed CC assignments published in their manuals. No MIDI Learn is required. The server connects directly to the synth's USB or DIN MIDI port.
+
+### 1. Find the MIDI port name
+
+Connect the synth via USB (or via a MIDI interface for DIN), then:
+
+```bash
+npm run list-ports
+```
+
+Look for something like `Moog Grandmother`, `Moog Matriarch`, or `Moog Messenger` in the output. That exact string is what you pass to `MOOG_MCP_USE_PORT`.
+
+### 2. Run the server
+
+```bash
+MOOG_MCP_SYNTH=messenger MOOG_MCP_USE_PORT="Moog Messenger" node dist/index.js
+```
+
+Or for Claude Desktop / Claude Code, see [Configure your MCP client](#configure-your-mcp-client) below.
+
+The server will warn at startup if `MOOG_MCP_USE_PORT` is not set and fall back to a virtual port (which won't reach the hardware).
+
+### Hardware MIDI notes
+
+**Grandmother:**
+- Core analog panel knobs (filter cutoff, resonance, envelope times, mixer levels) are physical pots and **cannot be MIDI-controlled** — only the parameters in `grandmother.ts` (oscillator octaves/tuning, glide, arp/seq settings, transpose) respond to CC.
+- Uses 14-bit CC pairs for: mod wheel (CC1/33), mod rate (CC3/35), glide time (CC5/37), arp rate (CC8/40), OSC2 frequency (CC12/44).
+- Default MIDI channel: 1 (set in Global Settings on the synth).
+
+**Matriarch:**
+- Same physical-pot limitation as the Grandmother; MIDI controls oscillator tuning, sync, delay, glide, arp/seq settings, and paraphony mode.
+- All CCs are 7-bit (no 14-bit pairs).
+- Default MIDI channel: 1.
+
+**Messenger:**
+- All panel controls are MIDI-accessible (66 tools).
+- 31 parameters use 14-bit CC pairs (firmware default). If you disable 14-bit mode in Settings → MIDI → 14-bit CC (firmware 1.0.8+), the server will still send MSB+LSB — toggle 14-bit back on or use `send_raw_cc` for manual 7-bit control.
+- Default MIDI channel: 1.
+- Waveshape CCs (OSC1/OSC2) morph continuously: ~0.0 = wave-fold; ~0.25 = triangle; ~0.5 = sawtooth; ~1.0 = square/pulse.
+- OSC Tune and OSC 2 Freq are bipolar14: value `0.5` = center/unison.
+
+#### Grandmother CC map
+
+| Control | CC | Type |
+|---|---|---|
+| Mod Wheel | 1 / 33 LSB | 14-bit |
+| Modulation Rate | 3 / 35 LSB | 14-bit |
+| Glide Rate | 5 / 37 LSB | 14-bit |
+| Arp/Seq Rate | 8 / 40 LSB | 14-bit |
+| OSC 2 Frequency | 12 / 44 LSB | 14-bit bipolar |
+| Glide On/Off | 65 | switch (64=on) |
+| Glide Type | 85 | 0/43/85 = LCR/LCT/Exp |
+| Legato Glide | 94 | switch |
+| Gated Glide | 103 | switch |
+| OSC 1 Octave | 74 | 0/32/64/96 = 32'/16'/8'/4' |
+| OSC 2 Octave | 75 | 0/32/64/96 = 32'/16'/8'/4' |
+| OSC 2 Sync | 77 | switch |
+| Keyboard Octave | 89 | 0/26/51/77/102 = −2/−1/0/+1/+2 |
+| Keyboard Transpose | 119 | 0–123 → −12..+12 st |
+| Pitch Bend Up | 107 | 0–127 → 0–24 st |
+| Pitch Bend Down | 108 | 0–127 → 0–24 st |
+| Arp/Seq Hold | 69 | switch |
+| Arp/Seq Play | 73 | switch |
+| Arp/Seq Mode | 91 | 0/43/85 = Arp/Seq/Rec |
+| Arp Pattern | 92 | 0/43/85 = Ord/Fwd-Bkwd/Rnd |
+| Arp Range | 93 | 0/43/85 = 1/2/3 oct |
+| Arp Clock Div | 90 | continuous |
+
+#### Matriarch CC map
+
+| Control | CC | Notes |
+|---|---|---|
+| OSC 1–4 Octave | 74/75/76/77 | 0/32/64/96 = 32'/16'/8'/4' |
+| OSC 2–4 Frequency | 16/17/18 | 7-bit, 64 = unison |
+| Hard Sync | 80 | switch |
+| OSC 2–4 Sync | 81/82/83 | switches |
+| Noise Filter Cutoff | 9 | 7-bit |
+| Para Voice Mode | 94 | 0/42/85/127 = Mono/Duo/Trio/Para |
+| Multi Trig | 95 | switch |
+| Delay Time | 12 | 7-bit |
+| Delay Spacing | 13 | 7-bit |
+| Delay Ping Pong | 88 | switch |
+| Delay Sync | 89 | switch |
+| Mod Rate | 3 | 7-bit |
+| Glide Rate | 5 | 7-bit |
+| Glide On/Off | 65 | switch |
+| Glide Type | 85 | 0/43/85 = LCR/LCT/Exp |
+| Gated Glide | 86 | switch |
+| Sustain Pedal | 64 | switch |
+| Keyboard Octave | 89 | 5-step |
+| Pitch Bend Up/Down | 107/108 | 0–24 st |
+| Keyboard Transpose | 119 | −12..+12 st |
+| Arp Rate | 8 | 7-bit |
+| Arp Swing | 14 | 64 = no swing |
+| Arp Gate Length | 15 | 7-bit |
+| Arp Latch | 69 | switch |
+| Arp Play | 73 | switch |
+| Arp Mode | 91 | 0/43/85 = Arp/Seq/Rec |
+| Arp Pattern | 92 | 0/43/85 |
+| Arp Range | 93 | 0/43/85 = 1/2/3 oct |
+
+#### Messenger CC map (abbreviated)
+
+| Control | CC (MSB) | Type |
+|---|---|---|
+| Mod Wheel | 1 | 14-bit |
+| Tempo | 2 | 14-bit |
+| LFO 1 Rate | 3 | 14-bit |
+| LFO 1 Depth | 4 | 14-bit |
+| Glide Rate | 5 | 14-bit |
+| Master Volume | 7 | 14-bit |
+| Noise Level | 8 | 14-bit |
+| OSC 1 Waveshape | 9 | 14-bit |
+| OSC Tune | 10 | 14-bit bipolar |
+| Expression Pedal | 11 | 14-bit |
+| OSC 2 Freq | 12 | 14-bit bipolar |
+| OSC Mod Amount | 13 | 14-bit |
+| OSC 2 Waveshape | 14 | 14-bit |
+| OSC 1 Level | 15 | 14-bit |
+| OSC 2 Level | 16 | 14-bit |
+| Sub OSC Level | 17 | 14-bit |
+| FB/Ext In Level | 18 | 14-bit |
+| Filter Cutoff | 19 | 14-bit |
+| OSC 2 Cutoff Amount | 20 | 14-bit |
+| Filter Resonance | 21 | 14-bit |
+| Filter EG Amount | 22 | 14-bit |
+| Filter EG ADSR | 23/24/25/26 | 14-bit |
+| LFO 2 Rate | 27 | 14-bit |
+| Amp EG ADSR | 28/29/30/31 | 14-bit |
+| OSC 1/2 Octave | 57/58 | 7-bit switchN |
+| OSC Sync | 59 | 7-bit switch |
+| Filter KB Tracking | 60 | 7-bit switchN |
+| Filter Res Bass | 61 | 7-bit switch |
+| Filter Mode | 78 | 7-bit switchN (5 modes) |
+| LFO 1 Waveshape | 71 | 7-bit switchN |
+| LFO 1 Destination | 72 | 7-bit switchN |
+| Multi Trig | 114 | 7-bit switch |
+| LFO 2 → Pitch/Cut/Amp | 116/117/118 | 7-bit switches |
+
+Full CC definitions: [`src/messenger.ts`](src/messenger.ts).
+
+---
+
 ## Configure your MCP client
 
-Add one server entry per synth. Each must have a unique `MOOG_MCP_PORT_NAME` — if both use the default `Moog MCP Out`, CoreMIDI will rename the second one to `Moog MCP Out1` and the app won't see it.
+Add one server entry per synth. App synths each need a unique `MOOG_MCP_PORT_NAME`; hardware synths need `MOOG_MCP_USE_PORT` set to the exact port name from `npm run list-ports`.
 
 For Claude Desktop, edit `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
@@ -223,33 +379,43 @@ For Claude Desktop, edit `~/Library/Application Support/Claude/claude_desktop_co
     "moog-model-d": {
       "command": "node",
       "args": ["/absolute/path/to/dist/index.js"],
-      "env": {
-        "MOOG_MCP_SYNTH": "model-d",
-        "MOOG_MCP_PORT_NAME": "Moog MCP Out",
-        "MOOG_MCP_CHANNEL": "1"
-      }
+      "env": { "MOOG_MCP_SYNTH": "model-d", "MOOG_MCP_PORT_NAME": "Moog MCP Out" }
     },
     "moog-model-15": {
       "command": "node",
       "args": ["/absolute/path/to/dist/index.js"],
-      "env": {
-        "MOOG_MCP_SYNTH": "model-15",
-        "MOOG_MCP_PORT_NAME": "Moog Model 15 Out",
-        "MOOG_MCP_CHANNEL": "1"
-      }
+      "env": { "MOOG_MCP_SYNTH": "model-15", "MOOG_MCP_PORT_NAME": "Moog Model 15 Out" }
+    },
+    "moog-grandmother": {
+      "command": "node",
+      "args": ["/absolute/path/to/dist/index.js"],
+      "env": { "MOOG_MCP_SYNTH": "grandmother", "MOOG_MCP_USE_PORT": "Moog Grandmother" }
+    },
+    "moog-matriarch": {
+      "command": "node",
+      "args": ["/absolute/path/to/dist/index.js"],
+      "env": { "MOOG_MCP_SYNTH": "matriarch", "MOOG_MCP_USE_PORT": "Moog Matriarch" }
+    },
+    "moog-messenger": {
+      "command": "node",
+      "args": ["/absolute/path/to/dist/index.js"],
+      "env": { "MOOG_MCP_SYNTH": "messenger", "MOOG_MCP_USE_PORT": "Moog Messenger" }
     }
   }
 }
 ```
 
-For Claude Code, add each server separately:
+For Claude Code:
 
 ```bash
-claude mcp add moog-model-d  -- env MOOG_MCP_SYNTH=model-d  node $(pwd)/dist/index.js
-claude mcp add moog-model-15 -- env MOOG_MCP_SYNTH=model-15 MOOG_MCP_PORT_NAME="Moog Model 15 Out" node $(pwd)/dist/index.js
+claude mcp add moog-model-d   -- env MOOG_MCP_SYNTH=model-d   node $(pwd)/dist/index.js
+claude mcp add moog-model-15  -- env MOOG_MCP_SYNTH=model-15  MOOG_MCP_PORT_NAME="Moog Model 15 Out" node $(pwd)/dist/index.js
+claude mcp add moog-grandmother -- env MOOG_MCP_SYNTH=grandmother MOOG_MCP_USE_PORT="Moog Grandmother" node $(pwd)/dist/index.js
+claude mcp add moog-matriarch -- env MOOG_MCP_SYNTH=matriarch MOOG_MCP_USE_PORT="Moog Matriarch" node $(pwd)/dist/index.js
+claude mcp add moog-messenger -- env MOOG_MCP_SYNTH=messenger MOOG_MCP_USE_PORT="Moog Messenger" node $(pwd)/dist/index.js
 ```
 
-Restart your MCP client. Both sets of Moog tools should appear in the tool palette.
+Restart your MCP client. Tools for all connected synths will appear in the tool palette.
 
 ## Talk to the Moogs
 
@@ -260,15 +426,19 @@ Try prompts like:
 - _"Play a duet — Model D on bass, Model 15 on melody, in A minor."_
 - _"Use the Model 15's 960 sequencer to run an 8-step ostinato while the Model D holds a drone."_
 - _"Make wind on the Model 15: noise generator, slow filter modulation, no keyboard notes."_
+- _"On the Grandmother, run the arpeggiator in Seq mode at a slow rate, play some notes."_
+- _"Set the Matriarch to Para mode (4-voice), play a slow Cm7 chord with the delay in ping-pong."_
+- _"On the Messenger, set up a warm pad: long filter and amp attack, LP 24 mode, slow LFO 1 to filter with triangle wave. Play a Cmaj9 chord."_
+- _"Slowly open the Messenger filter cutoff over 8 seconds while holding a bass note."_
 
 ## Configuration
 
-| Env var              | Default        | Purpose                                                                                                               |
-| -------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `MOOG_MCP_SYNTH`     | `model-d`      | Which synth to control: `model-d` or `model-15`.                                                                      |
-| `MOOG_MCP_PORT_NAME` | `Moog MCP Out` | Name of the virtual CoreMIDI port to create. **Must be unique per running instance.**                                 |
-| `MOOG_MCP_USE_PORT`  | _(unset)_      | If set, send to this **existing** MIDI output port name (e.g. `IAC Driver Bus 1`) instead of creating a virtual port. |
-| `MOOG_MCP_CHANNEL`   | `1`            | Default MIDI send channel (1–16). Each tool call can override per-call.                                               |
+| Env var              | Default        | Purpose                                                                                                                                 |
+| -------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `MOOG_MCP_SYNTH`     | `model-d`      | Which synth: `model-d`, `model-15`, `grandmother`, `matriarch`, `messenger`.                                                            |
+| `MOOG_MCP_PORT_NAME` | `Moog MCP Out` | Name of the virtual CoreMIDI port created for **app** synths. **Must be unique per running instance.**                                  |
+| `MOOG_MCP_USE_PORT`  | _(unset)_      | For **hardware** synths: exact name of the existing MIDI output port (e.g. `"Moog Messenger"`). Run `npm run list-ports` to find it.   |
+| `MOOG_MCP_CHANNEL`   | `1`            | Default MIDI send channel (1–16). Each tool call can override per-call.                                                                 |
 
 ## Routing through IAC instead of a virtual port
 
@@ -293,11 +463,14 @@ npm run smoke-test   # run MIDI smoke test (uses dist/smoke-test.js)
 
 The architecture is small and code-first by design:
 
-- [`src/model-d.ts`](src/model-d.ts) — Model D control surface map (40 controls). Add or change a knob here.
-- [`src/model-15.ts`](src/model-15.ts) — Model 15 control surface map (43 controls across 8 sections).
-- [`src/midi-engine.ts`](src/midi-engine.ts) — virtual port + held-note bookkeeping + sequence scheduler.
+- [`src/model-d.ts`](src/model-d.ts) — Model D control surface + shared `ControlSpec` type, `positionToCC`, `normalizedToCC`.
+- [`src/model-15.ts`](src/model-15.ts) — Model 15 control surface (43 controls across 8 sections).
+- [`src/grandmother.ts`](src/grandmother.ts) — Grandmother control surface (22 MIDI-accessible controls).
+- [`src/matriarch.ts`](src/matriarch.ts) — Matriarch control surface (35 controls).
+- [`src/messenger.ts`](src/messenger.ts) — Messenger control surface (53 controls, 31 with 14-bit CC).
+- [`src/midi-engine.ts`](src/midi-engine.ts) — virtual/hardware port + 7-bit CC + 14-bit CC (`cc14bit`) + sequence scheduler.
 - [`src/notes.ts`](src/notes.ts) — `"C4"` ↔ MIDI integer conversion.
-- [`src/index.ts`](src/index.ts) — MCP server, tool catalog, dispatcher. Reads `MOOG_MCP_SYNTH` at startup to select the active control surface.
+- [`src/index.ts`](src/index.ts) — MCP server, tool catalog, dispatcher. Reads `MOOG_MCP_SYNTH` at startup.
 
 ## Why this design?
 
