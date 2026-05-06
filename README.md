@@ -29,6 +29,41 @@ Built in TypeScript on top of:
 - **Sequence scheduling** for ambient textures: drop a list of timed events (notes + CC changes + pitch bends) and the server fires them with millisecond precision. 14-bit CC events in sequences are automatically split into their MSB+LSB pair.
 - **Safe panic.** All Notes Off + explicit note-off for every held note + sequence cancellation.
 
+## How it works
+
+```mermaid
+flowchart LR
+    U["👤 User
+    ───────────────────────────
+    'Play a warm C minor pad on
+    the Messenger — filter nearly
+    closed, slow LFO sweep open'"]
+
+    L["🤖 LLM Agent
+    ───────────────────────────
+    set_filter_cutoff(0.15)
+    set_amp_eg_attack(0.9)
+    set_lfo1_destination('Filter')
+    set_lfo1_rate(0.05)
+    play_chord(['C3','Eb3','G3'])"]
+
+    M["⚙️ MCP Server
+    ───────────────────────────
+    CC19+51 = 2457   filter cutoff, 14-bit
+    CC28+60 = 14745  amp attack, 14-bit
+    CC72    = 43     LFO → Filter
+    CC3+35  = 819    LFO rate, 14-bit
+    Note On: 48, 51, 55 @ vel 100"]
+
+    S["🎹 Moog Messenger
+    ───────────────────────────
+    Filter nearly closed
+    Chord swells from silence
+    LFO slowly opens the filter"]
+
+    U --> L --> M --> S
+```
+
 ## Quick start
 
 ```bash
